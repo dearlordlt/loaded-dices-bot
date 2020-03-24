@@ -1,0 +1,1 @@
+Worker: node loaded_dices_bot.js
