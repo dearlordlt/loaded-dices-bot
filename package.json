@@ -4,7 +4,8 @@
   "description": "",
   "main": "loaded_dices_bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node loaded_dices_bot.js"
   },
   "author": "",
   "license": "ISC",
