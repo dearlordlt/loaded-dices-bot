@@ -122,6 +122,13 @@ client.on('message', msg => {
             !d 3 BBC //3d when 4 is B, 5 is B and 6 is C
         `);
     }
+
+    if (parsed.command === 'rules') {
+        msg.reply(`
+            RULES: https://docs.google.com/document/d/1UDLsRMishYo1g9DEWHYx9pjEjcTNG2SON9UiSlkfH2Y/edit?usp=sharing
+            CHAR SHEET: https://docs.google.com/document/d/1pbIxLLUEEq0xLVn5_oYL9G0Obv8INCiuG-LomDHvPVA/edit?usp=sharing
+        `);
+    }
 });
 
 function r() {
