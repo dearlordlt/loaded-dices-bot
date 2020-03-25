@@ -79,6 +79,7 @@ client.on('message', msg => {
             let successes = 0;
             let rerolls = 0;
             let botch = false;
+            let botchRoll = 0;
             for (let i = 0; i < dices; i++) {
                 const roll = r();
                 if (roll >= effectiveness) {
@@ -88,6 +89,7 @@ client.on('message', msg => {
                     rerolls += 1;
                 }
                 if (roll === 1) {
+                    botchRoll += 1;
                     botch = true;
                 }
                 reply += roll + ',';
@@ -104,7 +106,12 @@ client.on('message', msg => {
                     reply += '+' + roll + ',';
                 }
             }
-            msg.reply(`roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`);
+            if (botchRoll >= Math.ceil(dices/2)) {
+                msg.reply(`roll ${dices}d: (${reply}) = Botch roll!`);
+            } else {
+                msg.reply(`roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`);
+            } 
+            
         } else {
             msg.reply('how many?');
         }
