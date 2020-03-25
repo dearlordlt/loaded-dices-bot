@@ -106,7 +106,7 @@ client.on('message', msg => {
                     reply += '+' + roll + ',';
                 }
             }
-            if (botchRoll > dices/2) {
+            if (botchRoll >= dices/2) {
                 msg.reply(`roll ${dices}d: (${reply}) = Botch roll!`);
             } else {
                 msg.reply(`roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`);
