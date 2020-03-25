@@ -57,16 +57,11 @@ client.on('message', msg => {
         }
 
         const damage = parsed.arguments[1].split('');
-        const arr6 = Array('-', '-', '-', '-', '-', '-');
 
         if (dices > 0) {
-            for (let i = 5; i >= 0; i--) {
-                if (damage) arr6[i] = damage.pop();
-                else break;
-            }
+            let arr6 = [...Array(6)].map(e => e = damage.pop() || '').reverse();
             let reply = '';
             let effects = '';
-            console.log(arr6);
             for (let i = 0; i < dices; i++) {
                 const roll = r();
                 effects += arr6[roll - 1] ? arr6[roll - 1] : '';
