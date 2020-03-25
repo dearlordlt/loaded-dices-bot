@@ -106,12 +106,12 @@ client.on('message', msg => {
                     reply += '+' + roll + ',';
                 }
             }
-            if (botchRoll >= dices/2) {
+            if (botchRoll >= dices / 2) {
                 msg.reply(`roll ${dices}d: (${reply}) = Botch roll!`);
             } else {
                 msg.reply(`roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`);
-            } 
-            
+            }
+
         } else {
             msg.reply('how many?');
         }
@@ -127,6 +127,8 @@ client.on('message', msg => {
             !s 5 4 //5d6 when 4 and more is success
           DAMAGE:
             !d 3 BBC //3d when 4 is B, 5 is B and 6 is C
+          OTHER:
+            !rules //links to resources
         `);
     }
 
