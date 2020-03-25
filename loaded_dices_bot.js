@@ -9,6 +9,11 @@ client.on('ready', () => {
     client.user.setActivity('Loading dices');
 });
 
+const sendMsg = (msg, line, command = '', args = []) => {
+    msg.reply(line);
+    console.log(line, command, args);
+}
+
 client.on('message', msg => {
     const parsed = parser.parse(msg, prefix);
     if (msg.author.bot) return;
@@ -35,9 +40,10 @@ client.on('message', msg => {
             if (hasBonus) {
                 sum = sum + hasBonus;
             }
-            msg.reply(`roll: (${reply}) = ${sum}`);
+            const line = `roll: (${reply}) = ${sum}`;
+            sendMsg(msg, line, parsed.command, parsed.arguments);
         } else {
-            msg.reply('how many?');
+            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
     }
 
@@ -45,7 +51,8 @@ client.on('message', msg => {
         const dices = parseInt(parsed.arguments[0]);
 
         if (!parsed.arguments[1]) {
-            msg.reply('choose effects, a.e. !d 3 BBT');
+            const line = 'choose effects, a.e. !d 3 BBT';
+            sendMsg(msg, line, parsed.command, parsed.arguments);
             return;
         }
 
@@ -65,9 +72,10 @@ client.on('message', msg => {
                 effects += arr6[roll - 1] ? arr6[roll - 1] : '';
                 reply += roll + ',';
             }
-            msg.reply(`roll ${dices}d and damage ${parsed.arguments[1]}: Result (${effects}), Roll (${reply})`);
+            const line = `roll ${dices}d and damage ${parsed.arguments[1]}: Result (${effects}), Roll (${reply})`;
+            sendMsg(msg, line, parsed.command, parsed.arguments);
         } else {
-            msg.reply('how many?');
+            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
     }
 
@@ -108,13 +116,15 @@ client.on('message', msg => {
                 }
             }
             if (botchRoll >= dices / 2) {
-                msg.reply(`roll ${dices}d: (${reply}) = Botch roll!`);
+                const line = `roll ${dices}d: (${reply}) = Botch roll!`;
+                sendMsg(msg, line, parsed.command, parsed.arguments);
             } else {
-                msg.reply(`roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`);
+                const line = `roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`;
+                sendMsg(msg, line, parsed.command, parsed.arguments);
             }
 
         } else {
-            msg.reply('how many?');
+            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
     }
 
