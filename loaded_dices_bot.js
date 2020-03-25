@@ -141,7 +141,7 @@ client.on('message', msg => {
     }
 });
 
-function r() {
+const r = () => {
     return Math.ceil(Math.random() * 6)
 }
 
