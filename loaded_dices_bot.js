@@ -131,6 +131,7 @@ client.on('message', msg => {
             !c //3d6
           SOCIAL:
             !s 5 4 //5d6 when 4 and more is success
+            !s 3 //3d6 when 4 and more is success
           DAMAGE:
             !d 3 BBC //3d when 4 is B, 5 is B and 6 is C
           OTHER:
