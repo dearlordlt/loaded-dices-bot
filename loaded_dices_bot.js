@@ -55,6 +55,7 @@ client.on('message', msg => {
         if (dices > 0) {
             for (let i = 5; i >= 0; i--) {
                 if (damage) arr6[i] = damage.pop();
+                else break;
             }
             let reply = '';
             let effects = '';
