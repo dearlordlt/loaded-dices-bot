@@ -1,7 +1,7 @@
 const { sendMsg } = require('../utils');
 class Variables {
     localVariablesMap = {};
-    help(){
+    help() {
         return `**VAR:**
             !var bow 18 //sets bow to 18 for user
             !c bow //rolls 3d + bow
@@ -15,11 +15,11 @@ class Variables {
                 return this.localVariablesMap[author][varName];
         return 0;
     };
-    handle(msg){
+    handle(msg) {
         const author = msg.author.id;
 
         if (!(author in this.localVariablesMap))
-        this.localVariablesMap[author] = {};
+            this.localVariablesMap[author] = {};
         let args = msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
         if (args) {
             if (args[1] === 'list') {
@@ -52,7 +52,7 @@ class Variables {
         sendMsg(msg, this.help());
     }
 }
-const variables=new Variables();
+const variables = new Variables();
 module.exports = {
     variables,
 }
