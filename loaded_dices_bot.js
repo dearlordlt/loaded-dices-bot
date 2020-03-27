@@ -17,51 +17,7 @@ const sendMsg = (msg, line, command = '', args = []) => {
     msg.reply(line);
     console.log(line, command, args);
 }
-const varCommandHandler = (msg) => {
-    const author = msg.author.id;
 
-    if (!localVariablesMap.hasOwnProperty(author))
-        localVariablesMap[author] = {};
-    let args = msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
-    if (args) {
-        if (args[1] === 'list') {
-            let lines = '';
-            const myVars = localVariablesMap[author];
-            Object.keys(myVars).forEach(e => lines = `${lines}\n ${e}=${myVars[e]}`);
-            msg.reply(`**Variables:**\n${lines}`);
-            return;
-        }
-        else if (args[1] === 'clear') {
-            delete localVariablesMap[author];
-            sendMsg(msg, `all variables cleared`);
-            return;
-        }
-
-    }
-    args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
-    if (args) {
-        if (args[2]) {
-            localVariablesMap[author][args[1]] = parseInt(args[2]);
-            sendMsg(msg, `added ${args[1]}=${args[2]}`);
-        }
-        else if (localVariablesMap[author].hasOwnProperty(args[1])) {
-            delete localVariablesMap[author][args[1]];
-            sendMsg(msg, `removed ${args[1]}`);
-        }
-        return;
-    }
-    //print help
-    sendMsg(msg, printVarHelp());
-
-}
-const printVarHelp = () => {
-    return `**VAR:**
-            !var bow 18 //sets bow to 18 for user
-            !c bow //rolls 3d + bow
-            !var list //list all variables for user
-            !var clear //clear all variable for user
-            !var bow //removes only bow variable`;
-}
 client.on('message', msg => {
     const parsed = parser.parse(msg, prefix);
     if (msg.author.bot) return;
@@ -247,6 +203,53 @@ client.on('message', msg => {
         `);
     }
 });
+
+const varCommandHandler = (msg) => {
+    const author = msg.author.id;
+
+    if (!localVariablesMap.hasOwnProperty(author))
+        localVariablesMap[author] = {};
+    let args = msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
+    if (args) {
+        if (args[1] === 'list') {
+            let lines = '';
+            const myVars = localVariablesMap[author];
+            Object.keys(myVars).forEach(e => lines = `${lines}\n ${e}=${myVars[e]}`);
+            msg.reply(`**Variables:**\n${lines}`);
+            return;
+        }
+        else if (args[1] === 'clear') {
+            delete localVariablesMap[author];
+            sendMsg(msg, `all variables cleared`);
+            return;
+        }
+
+    }
+    args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
+    if (args) {
+        if (args[2]) {
+            localVariablesMap[author][args[1]] = parseInt(args[2]);
+            sendMsg(msg, `added ${args[1]}=${args[2]}`);
+        }
+        else if (localVariablesMap[author].hasOwnProperty(args[1])) {
+            delete localVariablesMap[author][args[1]];
+            sendMsg(msg, `removed ${args[1]}`);
+        }
+        return;
+    }
+    //print help
+    sendMsg(msg, printVarHelp());
+
+}
+
+const printVarHelp = () => {
+    return `**VAR:**
+            !var bow 18 //sets bow to 18 for user
+            !c bow //rolls 3d + bow
+            !var list //list all variables for user
+            !var clear //clear all variable for user
+            !var bow //removes only bow variable`;
+}
 
 const decorateRoll = (roll, dices = 3) => {
     console.log(roll);
