@@ -1,5 +1,5 @@
 const variables = {
-    localVariablesMap={},
+    localVariablesMap:{},
     help=()=>{
         return `**VAR:**
             !var bow 18 //sets bow to 18 for user
