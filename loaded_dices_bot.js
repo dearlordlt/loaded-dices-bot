@@ -1,7 +1,10 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
-const { Rules } = require('./ajax-rules.js');
+const { r } = require('./utils');
 const { Environment } = require('./ajax-env.js');
+const { sublocation } = require('./commands/sublocation');
+const { location } = require('./commands/location');
+const { spell } = require('./commands/spell');
 require('dotenv').config();
 
 const client = new discord.Client();
@@ -16,112 +19,6 @@ client.on('ready', () => {
 const sendMsg = (msg, line, command = '', args = []) => {
     msg.reply(line);
     console.log(line, command, args);
-}
-const varCommandHandler = (msg) => {
-    const author = msg.author.id;
-
-    if (!(author in localVariablesMap))
-        localVariablesMap[author] = {};
-    let args = msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
-    if (args) {
-        if (args[1] === 'list') {
-            let lines = '';
-            const myVars = localVariablesMap[author];
-            Object.keys(myVars).forEach(e => lines = `${lines}\n ${e}=${myVars[e]}`);
-            msg.reply(`**Variables:**\n${lines}`);
-            return;
-        }
-        else if (args[1] === 'clear') {
-            delete localVariablesMap[author];
-            sendMsg(msg, `all variables cleared`);
-            return;
-        }
-
-    }
-    args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
-    if (args) {
-        if (args[2]) {
-            localVariablesMap[author][args[1]] = parseInt(args[2]);
-            sendMsg(msg, `added ${args[1]}=${args[2]}`);
-        }
-        else if (args[1] in localVariablesMap[author]) {
-            delete localVariablesMap[author][args[1]];
-            sendMsg(msg, `removed ${args[1]}`);
-        }
-        return;
-    }
-    //print help
-    sendMsg(msg, printVarHelp());
-
-}
-const combatCommandHandler=(msg)=>{
-    let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
-    let dices = parseInt(args[1] || "3");
-    let variable = args[2] || "<not exists>";
-    let sign = (args[3] === "-") ? -1 : 1;
-    let mod = parseInt(args[4] || "0");
-    mod = sign * mod;
-
-    if (dices > 0) {
-        const bonus = getVariable(msg.author.id, variable);
-        if (bonus !== 0) {
-            sendMsg(msg, `using ${variable}=${bonus}`);
-            mod = mod + bonus;
-        }
-        let roll = [...Array(dices)].map(el => el = r());
-        let initialRollSum = roll.reduce((a, b) => a + b, 0);
-        let line= `roll: [${decorateRoll(roll, dices)}] = ${initialRollSum}`;
-        if (initialRollSum>16)
-            line=`${line} **critical success !!!** `;
-        if (initialRollSum<5)
-            line=`${line} **critical failure !!!** `;
-
-        if (initialRollSum<=environment.autofail) {
-            line=`${line} **autofail**`;
-            sendMsg(msg, line);
-            return;
-        }
-
-        if (mod != 0)
-            line = `${line} ${(mod > 0) ? '+' + mod : mod}=${initialRollSum + mod}`;
-
-        sendMsg(msg, line);
-
-
-    } else {
-        sendMsg(msg, 'how many?');
-    }
-}
-const environmentCommandHandler=(msg)=>{
-    let args = msg.content.match(/!env\s*((autofail\s(\d+))*(clear)*(list)*)\s*/i);
-    if (args) {
-        
-        if (args[1] === 'clear') {
-            environment = new Environment();
-            msg.reply(`environment restored to default values`);
-            return;
-        }
-        else if (args[1]=== '') {
-            msg.reply(`**environment**\nautofail=${environment.autofail}`);
-            return;
-        }
-        else {
-            environment.autofail = parseInt(args[3]);
-            msg.reply(`autofail=${environment.autofail}`);
-            return;
-        }
-
-    }
-
-}
-
-const printVarHelp = () => {
-    return `**VAR:**
-            !var bow 18 //sets bow to 18 for user
-            !c bow //rolls 3d + bow
-            !var list //list all variables for user
-            !var clear //clear all variable for user
-            !var bow //removes only bow variable`;
 }
 client.on('message', msg => {
     const parsed = parser.parse(msg, prefix);
@@ -189,82 +86,19 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'spell') {
-        let roll = [...Array(3)].map(el => el = r());
-        let debug = false;
-        let dices = 3;
-
-        if (parsed.arguments[0]) {
-            roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
-            dices = parsed.arguments[0].split('').length;
-            debug = true;
-        }
-
-        let initialRollSum = roll.reduce((a, b) => a + b, 0);
-
-        roll = [...roll, ...explode(roll)];
-
-        const sum = roll.reduce((a, b) => a + b, 0);
-        const successDice = roll.some(el => el > 3);
-        const successValue = roll.filter(el => el > 3).length;
-
-        let message = successDice && sum > 7 ? 'success' : 'failure';
-        (initialRollSum >= 17) ? message = `**critical success !!!** ${Rules.getMagicFortune(r(), initialRollSum)}` : null;
-        (initialRollSum <= 4) ? message = `**critical failure !!!** ${Rules.getMagicMisfortune(r(), initialRollSum)}` : null;
-
-        let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
-        sendMsg(msg, line, parsed.command, parsed.arguments);
+        spell(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'l') {
-        const roll = r();
-        let line = `${roll} hits ${Rules.getLocation(6)}`;
-        sendMsg(msg, line, parsed.command, parsed.arguments);
+        location(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'sl') {
-        const roll = r();
-        const location = parseInt(parsed.arguments[0]) || 1;
-
-        if (location < 1 || location > 6) {
-            sendMsg(msg, `please set location (1,2,3,4,5,6)`, parsed.command, parsed.arguments);
-        } else {
-            const locationStr = Rules.locations[location - 1];
-
-            let line = `${roll} hits ${Rules.getSubLocation(roll, locationStr)}`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        }
+        sublocation(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'crit') {
-        const roll = r();
-        const type = parsed.arguments[0]; //melee, ranged, spell
-        const value = parsed.arguments[1]; //3, 4, 17, 18
-
-        if (type != 'melee' && type != 'ranged' && type != 'spell') {
-            sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, parsed.command, parsed.arguments);
-        } else if (value != '3' && value != '4' && value != '17' && value != '18') {
-            sendMsg(msg, `wrong value: ${value}, must be 3, 4, 17 or 18`, parsed.command, parsed.arguments);
-        } else {
-            let message = '';
-
-            if (type === 'melee') {
-                if (value == 17 || value == 18) message = Rules.getMeleeFortune(roll, value);
-                if (value == 3 || value == 4) message = Rules.getMeleeMisfortune(roll, value);
-            }
-
-            if (type === 'ranged') {
-                if (value == 17 || value == 18) message = Rules.getRangedFortune(roll, value);
-                if (value == 3 || value == 4) message = Rules.getRangedMisfortune(roll, value);
-            }
-
-            if (type === 'spell') {
-                if (value == 17 || value == 18) message = Rules.getMagicFortune(roll, value);
-                if (value == 3 || value == 4) message = Rules.getMagicMisfortune(roll, value);
-            }
-
-            let line = `roll - ${roll}: ${message}`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        }
+        crit(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'h') {
@@ -301,6 +135,113 @@ client.on('message', msg => {
         `);
     }
 });
+const combatCommandHandler=(msg)=>{
+    let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
+    let dices = parseInt(args[1] || "3");
+    const variable = args[2] || "<not exists>";
+    let sign = (args[3] === "-") ? -1 : 1;
+    let mod = parseInt(args[4] || "0");
+    mod = sign * mod;
+
+    if (dices > 0) {
+        const bonus = getVariable(msg.author.id, variable);
+        if (bonus !== 0) {
+            sendMsg(msg, `using ${variable}=${bonus}`);
+            mod = mod + bonus;
+        }
+        let roll = [...Array(dices)].map(el => el = r());
+        let initialRollSum = roll.reduce((a, b) => a + b, 0);
+        let line= `roll: [${decorateRoll(roll, dices)}] = ${initialRollSum}`;
+        if (initialRollSum>16)
+            line=`${line} **critical success !!!** `;
+        if (initialRollSum<5)
+            line=`${line} **critical failure !!!** `;
+
+        if (initialRollSum<=environment.autofail) {
+            line=`${line} **autofail**`;
+            sendMsg(msg, line);
+            return;
+        }
+
+        if (mod != 0)
+            line = `${line} ${(mod > 0) ? '+' + mod : mod}=${initialRollSum + mod}`;
+
+        sendMsg(msg, line);
+
+
+    } else {
+        sendMsg(msg, 'how many?');
+    }
+}
+const environmentCommandHandler=(msg)=>{
+    let args = msg.content.match(/!env\s*((autofail\s(\d+))*(clear)*(list)*)\s*/i);
+    if (args) {
+        
+        if (args[1] === 'clear') {
+            environment = new Environment();
+            msg.reply(`environment restored to default values`);
+            return;
+        }
+        else if (args[1]=== '') {
+            msg.reply(`**environment**\nautofail=${environment.autofail}`);
+            return;
+        }
+        else {
+            environment.autofail = parseInt(args[3]);
+            msg.reply(`autofail=${environment.autofail}`);
+            return;
+        }
+
+    }
+
+}
+
+const varCommandHandler = (msg) => {
+    const author = msg.author.id;
+
+    if (!(author in localVariablesMap))
+        localVariablesMap[author] = {};
+    let args = msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
+    if (args) {
+        if (args[1] === 'list') {
+            let lines = '';
+            const myVars = localVariablesMap[author];
+            Object.keys(myVars).forEach(e => lines = `${lines}\n ${e}=${myVars[e]}`);
+            msg.reply(`**Variables:**\n${lines}`);
+            return;
+        }
+        else if (args[1] === 'clear') {
+            delete localVariablesMap[author];
+            sendMsg(msg, `all variables cleared`);
+            return;
+        }
+
+    }
+    args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
+    if (args) {
+        if (args[2]) {
+            localVariablesMap[author][args[1]] = parseInt(args[2]);
+            sendMsg(msg, `added ${args[1]}=${args[2]}`);
+        }
+        else if (args[1] in localVariablesMap[author]) {
+            delete localVariablesMap[author][args[1]];
+            sendMsg(msg, `removed ${args[1]}`);
+        }
+        return;
+    }
+    //print help
+    sendMsg(msg, printVarHelp());
+
+}
+
+const printVarHelp = () => {
+    return `**VAR:**
+            !var bow 18 //sets bow to 18 for user
+            !c bow //rolls 3d + bow
+            !var list //list all variables for user
+            !var clear //clear all variable for user
+            !var bow //removes only bow variable`;
+}
 
 const decorateRoll = (roll, dices = 3) => {
     console.log(roll);
@@ -318,10 +259,6 @@ const decorateRoll = (roll, dices = 3) => {
         }
     });
     return roll;
-}
-
-const r = () => {
-    return Math.ceil(Math.random() * 6)
 }
 
 const explode = (arr) => {
