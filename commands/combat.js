@@ -1,6 +1,6 @@
 const { r, decorateRoll } = require('../utils');
 const { variables } = requre('./variables');
-combatCommandHandler={
+const combat={
     handle(msg, environment){
         let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
         let dices = parseInt(args[1] || "3");
@@ -39,10 +39,13 @@ combatCommandHandler={
             sendMsg(msg, 'how many?');
         }
     },
-    help(msg){
+    help(){
         return `**COMBAT:**
         !c 3 + 10 //3d6 + 10
         !c + 10 //3d6 + 10
         !c //3d6`;
     }
+}
+module.exports = {
+    combat,
 }

@@ -21,6 +21,13 @@ const social = (args, command, sendMsg, msg) => {
     }
 }
 
+const printSocialHelp = () => {
+    return `**SOCIAL:**
+            !s 5 4 //5d6 when 4 and more is success
+            !s 3 //3d6 when 4 and more is success`;
+}
+
 module.exports = {
     social,
+    printSocialHelp
 }

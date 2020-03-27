@@ -27,6 +27,12 @@ const damage = (args, command, sendMsg, msg) => {
     }
 }
 
+const printDamageHelp = () => {
+    return `**DAMAGE:**
+            !d 3 BBC //3d when 4 is B, 5 is B and 6 is C`;
+}
+
 module.exports = {
     damage,
+    printDamageHelp
 }

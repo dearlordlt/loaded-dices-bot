@@ -3,11 +3,13 @@ const parser = require('discord-command-parser');
 const { r, explode, decorateRoll } = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
-const { location } = require('./commands/location');
-const { spell } = require('./commands/spell');
-const { social } = require('./commands/social');
-const { damage } = require('./commands/damage');
+const { location, printLocationHelp } = require('./commands/location');
+const { spell, printSpellHelp } = require('./commands/spell');
+const { social, printSocialHelp } = require('./commands/social');
+const { damage, printDamageHelp } = require('./commands/damage');
 const { variables } = require('./commands/variables');
+const { combat } = require('./commands/combat');
+const { crit, printCritHelp } = require('./commands/crit');
 require('dotenv').config();
 
 const client = new discord.Client();
@@ -34,7 +36,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'c') {
-        combatCommandHandler(msg);
+        combat.handle(msg, environment);
         return;
     }
 
@@ -75,28 +77,19 @@ client.on('message', msg => {
 
     if (parsed.command === 'h') {
         msg.reply(`
-          **COMBAT:**
-            !c 3 + 10 //3d6 + 10
-            !c + 10 //3d6 + 10
-            !c //3d6
-          **SOCIAL:**
-            !s 5 4 //5d6 when 4 and more is success
-            !s 3 //3d6 when 4 and more is success
-          **DAMAGE:**
-            !d 3 BBC //3d when 4 is B, 5 is B and 6 is C
+          ${combat.help()}
+          ${printSocialHelp()}
+          ${printDamageHelp()}
           ${variables.help()}
-          **SPELL:**
-            !spell //rolls 3d spell roll
-          **LOCATIONS**
-            !l //roll unaimed location
-            !sl 1 //1,2,3,4,5,6 represents head, body, l.arm, r.arm, l.leg, r.leg
+          ${printSpellHelp()}
+          ${printLocationHelp()}
           **ENVIRONMENT**
             !env //prints current environment
             !env clear //restores default
             !env autofail 9 //sets autofail to 9
+          ${printCritHelp()}
           **OTHER:**
             !rules //links to resources
-            !crit melee|ranged|spell 3|4|17|18
         `);
     }
 

@@ -28,6 +28,12 @@ const spell = (args, command, sendMsg, msg) => {
     sendMsg(msg, line, command, args);
 }
 
+const printSpellHelp = () => {
+    return `**SPELL:**
+            !spell //rolls 3d spell roll`;
+}
+
 module.exports = {
     spell,
+    printSpellHelp
 }
