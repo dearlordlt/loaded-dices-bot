@@ -46,7 +46,7 @@ class Variables {
                 let r=0;
                 if(args[6])
                     r=parseInt(args[6]);
-                let val=parseInt(args[2]);
+                let val=parseInt(args[4]);
                 
                 if(cnt===0){
                     this.localVariablesMap[author][args[1]] =this.modValue(val,r);
