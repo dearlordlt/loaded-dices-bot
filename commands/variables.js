@@ -1,6 +1,6 @@
 const { sendMsg } = require('../utils');
 class Variables {
-    localVariablesMap={};
+    localVariablesMap = {};
     help(){
         return `**VAR:**
             !var bow 18 //sets bow to 18 for user
@@ -49,7 +49,7 @@ class Variables {
             return;
         }
         //print help
-        sendMsg(msg, this.printVarHelp());
+        sendMsg(msg, this.help());
     }
 }
 const variables=new Variables();
