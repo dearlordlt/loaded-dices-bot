@@ -44,7 +44,8 @@ client.on('message', msg => {
                 sendMsg(`using ${variable}=${bonus}`); 
                 mod=mod+bonus;
             }
-            combatRoll(dices,mod);
+            sendMsg(msg,  combatRoll(dices,mod), args);
+           
         } else {
             sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
@@ -175,6 +176,6 @@ const combatRoll=(dices, mod)=>{
     if (mod!=0)
         line =`${line} ${(mod>0)?'+'+mod:mod}=${sum+mod}`;
         
-    sendMsg(msg, line, args);
+    return line;
 }
 client.login(process.env.API_KEY);
