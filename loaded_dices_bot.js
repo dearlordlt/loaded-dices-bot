@@ -138,12 +138,13 @@ client.on('message', msg => {
 
         const sum = roll.reduce((a, b) => a + b, 0);
         const successDice = roll.some(el => el > 3);
+        const successValue = roll.filter(el => el > 3).length;
 
         let message = successDice && sum > 7 ? 'success' : 'failure';
         (sum >= 17) ? message = 'critical success !!!' : null;
         (sum <= 4) ? message = 'critical failure !!!' : null;
 
-        let line = `roll 3d: [${roll}] = ${successDice}; ${message} ${debug ? ', this is fake roll' : ''}`;
+        let line = `roll 3d: [${roll}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
