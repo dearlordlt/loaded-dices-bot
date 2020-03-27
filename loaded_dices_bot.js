@@ -170,7 +170,7 @@ const combatRoll=(dices, mod)=>{
         reply += roll;
     }
     
-    console.log(dices, sign, mod);
+    console.log(dices, mod);
     let line = `roll: [${reply}] = ${sum}`;
     if (mod!=0)
         line =`${line} ${(mod>0)?'+'+mod:mod}=${sum+mod}`;
