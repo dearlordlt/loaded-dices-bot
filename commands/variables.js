@@ -49,9 +49,8 @@ class Variables {
                 let val=parseInt(args[4]);
                 
                 if(cnt===0){
-                    const name=args[1];
-                    this.localVariablesMap[author][name] =this.modValue(val,r);
-                    sendMsg(msg, `added ${args[1]}=${this.localVariablesMap[author][name]}`);
+                    this.localVariablesMap[author][args[1]] =this.modValue(val,r);
+                    sendMsg(msg, `added ${args[1]}=${this.localVariablesMap[author][args[1]]}`);
                 }else{
                     for(let idx=1;idx<=cnt;idx++){
                         const name=args[1]+idx;
