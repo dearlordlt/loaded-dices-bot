@@ -103,13 +103,14 @@ client.on('message', msg => {
         let roll = [...Array(3)].map(el => el = r());
         let debug = false;
         let dices = 3;
-        const initialRollSum = roll.reduce((a, b) => a + b, 0);
 
         if (parsed.arguments[0]) {
             roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
             dices = parsed.arguments[0].split('').length;
             debug = true;
         }
+
+        let initialRollSum = roll.reduce((a, b) => a + b, 0);
 
         roll = [...roll, ...explode(roll)];
 
