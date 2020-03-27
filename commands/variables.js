@@ -1,6 +1,6 @@
 const variables = {
     localVariablesMap:{},
-    help=()=>{
+    help:()=>{
         return `**VAR:**
             !var bow 18 //sets bow to 18 for user
             !c bow //rolls 3d + bow
@@ -8,13 +8,13 @@ const variables = {
             !var clear //clear all variable for user
             !var bow //removes only bow variable`;
     },
-    getVariable = (author, varName) => {
+    getVariable: (author, varName) => {
         if (author in localVariablesMap)
             if (varName in localVariablesMap[author])
                 return localVariablesMap[author][varName];
         return 0;
     },
-    handle=(msg)=>{
+    handle:(msg)=>{
         const author = msg.author.id;
 
         if (!(author in localVariablesMap))
