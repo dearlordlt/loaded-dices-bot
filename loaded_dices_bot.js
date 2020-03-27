@@ -136,6 +136,8 @@ client.on('message', msg => {
             debug = true;
         }
 
+        roll = [...roll, ...explode(roll)];
+
         const sum = roll.reduce((a, b) => a + b, 0);
         const successDice = roll.some(el => el > 3);
         const successValue = roll.filter(el => el > 3).length;
@@ -180,12 +182,22 @@ client.on('message', msg => {
 const r = () => {
     return Math.ceil(Math.random() * 6)
 }
+
+const explode = (arr) => {
+    let newArr = [...Array(arr.filter(el => el === 6).length)].map(el => el = r());
+    if (newArr.some(el => el === 6)) {
+        newArr = [...explode(newArr), ...newArr];
+    }
+    return newArr;
+}
+
 const getVariable = (author, varName) => {
     if (localVariablesMap.hasOwnProperty(author))
         if (localVariablesMap[author].hasOwnProperty(varName))
             return localVariablesMap[author][varName];
     return 0;
 }
+
 const combatRoll = (dices, mod) => {
     let sum = 0;
     let reply = '';
