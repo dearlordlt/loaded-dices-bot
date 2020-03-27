@@ -28,7 +28,7 @@ const varCommandHandler=(msg)=>{
             let lines='';
             const myVars=localVariablesMap[author];
             Object.keys(myVars).forEach(e =>lines=`${lines}\n ${e}=${myVars[e]}`);
-            msg.reply(`**Variables:*\n${lines}`);
+            msg.reply(`**Variables:**\n${lines}`);
             return;
         }
         else if(args[1]==='clear')
