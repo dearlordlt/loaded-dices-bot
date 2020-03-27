@@ -92,7 +92,7 @@ client.on('message', msg => {
 
             let message = botchDice >= dices / 2 ? 'botch' : 'success';
 
-            let line = `roll ${dices}d: [${roll}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
+            let line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
             sendMsg(msg, line, parsed.command, parsed.arguments);
         } else {
             sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
@@ -102,9 +102,11 @@ client.on('message', msg => {
     if (parsed.command === 'spell') {
         let roll = [...Array(3)].map(el => el = r());
         let debug = false;
+        let dices = 3;
 
         if (parsed.arguments[0]) {
             roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
+            dices = parsed.arguments[0].split('').length;
             debug = true;
         }
 
@@ -118,7 +120,7 @@ client.on('message', msg => {
         (sum >= 17) ? message = 'critical success !!!' : null;
         (sum <= 4) ? message = 'critical failure !!!' : null;
 
-        let line = `roll 3d: [${roll}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
+        let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
@@ -151,6 +153,24 @@ client.on('message', msg => {
     }
 });
 
+const decorateRoll = (roll, dices = 3) => {
+    console.log(roll);
+    roll = roll.map((el, index) => {
+        if (index >= dices) {
+            return `**${el}**`
+        }
+        else if (el === 6) {
+            return `__${el}__`
+        }
+        else if (el === 1) {
+            return `~~${el}~~`
+        } else {
+            return el;
+        }
+    });
+    return roll;
+}
+
 const r = () => {
     return Math.ceil(Math.random() * 6)
 }
@@ -158,7 +178,7 @@ const r = () => {
 const explode = (arr) => {
     let newArr = [...Array(arr.filter(el => el === 6).length)].map(el => el = r());
     if (newArr.some(el => el === 6)) {
-        newArr = [...explode(newArr), ...newArr];
+        newArr = [...newArr, ...explode(newArr)];
     }
     return newArr;
 }
