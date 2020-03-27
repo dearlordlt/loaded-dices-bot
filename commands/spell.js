@@ -1,4 +1,4 @@
-const { r } = require('../utils');
+const { r, explode, decorateRoll } = require('../utils');
 const { Rules } = require('../ajax-rules');
 
 const spell = (args, command, sendMsg, msg) => {
