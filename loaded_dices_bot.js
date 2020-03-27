@@ -4,6 +4,7 @@ const { r } = require('./utils');
 const { Rules } = require('./ajax-rules');
 const { crit } = require('./commands/crit');
 const { sublocation } = require('./commands/sublocation');
+const { location } = require('./commands/location');
 
 require('dotenv').config();
 
@@ -125,9 +126,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'l') {
-        const roll = r();
-        let line = `${roll} hits ${Rules.getLocation(6)}`;
-        sendMsg(msg, line, parsed.command, parsed.arguments);
+        location(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'sl') {
