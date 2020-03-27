@@ -152,8 +152,8 @@ client.on('message', msg => {
 
     if (parsed.command === 'crit') {
         const roll = r();
-        const type = parsed.arguments[0] || 'melee'; //melee, ranged, spell
-        const value = parsed.arguments[1] || '17'; //3, 4, 17, 18
+        const type = parsed.arguments[0]; //melee, ranged, spell
+        const value = parsed.arguments[1]; //3, 4, 17, 18
 
         if (type != 'melee' && type != 'ranged' && type != 'spell') {
             sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, parsed.command, parsed.arguments);
