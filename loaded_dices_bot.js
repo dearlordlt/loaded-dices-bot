@@ -136,6 +136,20 @@ client.on('message', msg => {
         sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
+    if (parsed.command === 'sl') {
+        const roll = r();
+        const location = parseInt(parsed.arguments[0]) || 1;
+
+        if (location < 1 || location > 6) {
+            sendMsg(msg, `please set location (1,2,3,4,5,6)`, parsed.command, parsed.arguments);
+        } else {
+            const locationStr = Rules.locations[location - 1];
+
+            let line = `${roll} hits ${Rules.getSubLocation(roll, locationStr)}`;
+            sendMsg(msg, line, parsed.command, parsed.arguments);
+        }
+    }
+
     if (parsed.command === 'crit') {
         const roll = r();
         const type = parsed.arguments[0] || 'melee'; //melee, ranged, spell
@@ -192,6 +206,7 @@ client.on('message', msg => {
           **OTHER:**
             !rules //links to resources
             !l //roll unaimed location
+            !sl 1 //1,2,3,4,5,6 represents head, body, l.arm, r.arm, l.leg, r.leg
             !crit melee|ranged|spell 3|4|17|18
         `);
     }
