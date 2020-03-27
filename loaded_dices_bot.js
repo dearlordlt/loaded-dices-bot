@@ -48,12 +48,12 @@ client.on('message', msg => {
             
             sum = sum;
             mod=sign*mod;
-            
+            console.log(dices, sign, mod);
             let line = `roll: [${reply}] = ${sum}`;
             if (mod!=0)
                 line =`${line} ${(mod>0)?'+'+mod:mod}=${sum+mod}`;
                 
-            sendMsg(msg, line, parsed.command, parsed.arguments);
+            sendMsg(msg, line, args);
         } else {
             sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
