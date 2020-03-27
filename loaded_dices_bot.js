@@ -203,10 +203,11 @@ client.on('message', msg => {
             !c bow //rolls 3d + bow
           **SPELL:**
             !spell //rolls 3d spell roll
-          **OTHER:**
-            !rules //links to resources
+          **LOCATIONS**
             !l //roll unaimed location
             !sl 1 //1,2,3,4,5,6 represents head, body, l.arm, r.arm, l.leg, r.leg
+          **OTHER:**
+            !rules //links to resources
             !crit melee|ranged|spell 3|4|17|18
         `);
     }
