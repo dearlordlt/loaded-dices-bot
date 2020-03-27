@@ -1,10 +1,10 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
 const { r } = require('./utils');
-const { Rules } = require('./ajax-rules');
 const { crit } = require('./commands/crit');
 const { sublocation } = require('./commands/sublocation');
 const { location } = require('./commands/location');
+const { spell } = require('./commands/spell');
 
 require('dotenv').config();
 
@@ -99,30 +99,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'spell') {
-        let roll = [...Array(3)].map(el => el = r());
-        let debug = false;
-        let dices = 3;
-
-        if (parsed.arguments[0]) {
-            roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
-            dices = parsed.arguments[0].split('').length;
-            debug = true;
-        }
-
-        let initialRollSum = roll.reduce((a, b) => a + b, 0);
-
-        roll = [...roll, ...explode(roll)];
-
-        const sum = roll.reduce((a, b) => a + b, 0);
-        const successDice = roll.some(el => el > 3);
-        const successValue = roll.filter(el => el > 3).length;
-
-        let message = successDice && sum > 7 ? 'success' : 'failure';
-        (initialRollSum >= 17) ? message = `**critical success !!!** ${Rules.getMagicFortune(r(), initialRollSum)}` : null;
-        (initialRollSum <= 4) ? message = `**critical failure !!!** ${Rules.getMagicMisfortune(r(), initialRollSum)}` : null;
-
-        let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
-        sendMsg(msg, line, parsed.command, parsed.arguments);
+        spell(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'l') {
