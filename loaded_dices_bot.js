@@ -1,9 +1,13 @@
 const discord = require('discord.js');
-const client = new discord.Client();
 const parser = require('discord-command-parser');
+const { Rules } = require('./ajax-rules.js');
+
 require('dotenv').config();
+
+const client = new discord.Client();
 const prefix = '!';
 const localVariablesMap = {};
+
 client.on('ready', () => {
     console.log(`Connected as ${client.user.tag}`);
     client.user.setActivity('Loading dices');
