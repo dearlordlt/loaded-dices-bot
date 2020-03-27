@@ -10,7 +10,7 @@ const variables = {
             !var bow //removes only bow variable`;
     },
     getVariable(author, varName) {
-        if (author in variables.localVariablesMap)
+        if (author in localVariablesMap)
             if (varName in localVariablesMap[author])
                 return localVariablesMap[author][varName];
         return 0;
