@@ -1,5 +1,4 @@
 class Environment {
-
     autofail = 7;
 }
 
