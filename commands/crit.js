@@ -1,12 +1,15 @@
-const crit = (arguments, command, sendMsg) => {
+const { r } = require('../utils');
+const { Rules } = require('../ajax-rules');
+
+const crit = (args, command, sendMsg, msg) => {
     const roll = r();
-    const type = arguments[0]; //melee, ranged, spell
-    const value = arguments[1]; //3, 4, 17, 18
+    const type = args[0]; //melee, ranged, spell
+    const value = args[1]; //3, 4, 17, 18
 
     if (type != 'melee' && type != 'ranged' && type != 'spell') {
-        sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, command, arguments);
+        sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, command, args);
     } else if (value != '3' && value != '4' && value != '17' && value != '18') {
-        sendMsg(msg, `wrong value: ${value}, must be 3, 4, 17 or 18`, command, arguments);
+        sendMsg(msg, `wrong value: ${value}, must be 3, 4, 17 or 18`, command, args);
     } else {
         let message = '';
 
@@ -26,7 +29,7 @@ const crit = (arguments, command, sendMsg) => {
         }
 
         let line = `roll - ${roll}: ${message}`;
-        sendMsg(msg, line, command, arguments);
+        sendMsg(msg, line, command, args);
     }
 }
 

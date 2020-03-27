@@ -1,6 +1,7 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
-const { Rules } = require('./ajax-rules.js');
+const { r } = require('./utils');
+const { Rules } = require('./ajax-rules');
 const { crit } = require('./commands/crit');
 
 require('dotenv').config();
@@ -143,7 +144,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'crit') {
-        crit(parsed.arguments, parsed.command, sendMsg);
+        crit(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'h') {
@@ -240,10 +241,6 @@ const decorateRoll = (roll, dices = 3) => {
         }
     });
     return roll;
-}
-
-const r = () => {
-    return Math.ceil(Math.random() * 6)
 }
 
 const explode = (arr) => {
