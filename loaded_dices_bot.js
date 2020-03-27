@@ -88,7 +88,7 @@ client.on('message', msg => {
             roll = [...roll, ...explode(roll)];
 
             const botchDice = roll.filter(el => el === 1).length;
-            const successDice = roll.filter(el => el > effectiveness).length;
+            const successDice = roll.filter(el => el >= effectiveness).length;
 
             let message = botchDice >= dices / 2 ? '**botch**' : 'success';
 
