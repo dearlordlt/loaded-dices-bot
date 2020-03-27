@@ -128,10 +128,12 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'spell') {
-        const roll = [...Array(3)].map(el => el = r());
+        let roll = [...Array(3)].map(el => el = r());
+        let debug = false;
 
         if (parsed.arguments[0]) {
             roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
+            debug = true;
         }
 
         const sum = roll.reduce((a, b) => a + b, 0);
@@ -141,7 +143,7 @@ client.on('message', msg => {
         (sum >= 17) ? message = 'critical success !!!' : null;
         (sum <= 4) ? message = 'critical failure !!!' : null;
 
-        let line = `roll 3d: [${roll}] = ${successDice}; ${message}`;
+        let line = `roll 3d: [${roll}] = ${successDice}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
