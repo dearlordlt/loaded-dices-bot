@@ -36,7 +36,7 @@ class Variables {
             }
 
         }
-        args = msg.content.match(/!var\s*([a-z]+)(\[(\d+)\])*\s*(\S*)\s*([+-]{2}(\d))*/i);
+        args = msg.content.match(/!var\s*([a-z]+[0-9]*)(\[(\d+)\])*\s*(\S*)\s*([+-]{2}(\d))*/i);
         if (args) {
             if (args[4]) {
                 let idx=1;
