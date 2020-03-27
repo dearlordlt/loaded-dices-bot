@@ -24,16 +24,20 @@ const sendMsg = (msg, line, command = '', args = []) => {
 }
 client.on('message', msg => {
     const parsed = parser.parse(msg, prefix);
+
     if (msg.author.bot) return;
     if (!parsed.success) return;
+
     if (parsed.command === 'var') {
         varCommandHandler(msg);
         return;
     }
+
     if (parsed.command === 'c') {
         combatCommandHandler(msg);
         return;
     }
+
     if (parsed.command === 'env') {
         environmentCommandHandler(msg);
         return;
@@ -41,26 +45,32 @@ client.on('message', msg => {
 
     if (parsed.command === 'd') {
         damage(parsed.arguments, parsed.command, sendMsg, msg);
+        return;
     }
 
     if (parsed.command === 's') {
         social(parsed.arguments, parsed.command, sendMsg, msg);
+        return;
     }
 
     if (parsed.command === 'spell') {
         spell(parsed.arguments, parsed.command, sendMsg, msg);
+        return;
     }
 
     if (parsed.command === 'l') {
         location(parsed.arguments, parsed.command, sendMsg, msg);
+        return;
     }
 
     if (parsed.command === 'sl') {
         sublocation(parsed.arguments, parsed.command, sendMsg, msg);
+        return;
     }
 
     if (parsed.command === 'crit') {
         crit(parsed.arguments, parsed.command, sendMsg, msg);
+        return;
     }
 
     if (parsed.command === 'h') {
@@ -97,7 +107,7 @@ client.on('message', msg => {
         `);
     }
 });
-const combatCommandHandler=(msg)=>{
+const combatCommandHandler = (msg) => {
     let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
     let dices = parseInt(args[1] || "3");
     const variable = args[2] || "<not exists>";
@@ -113,14 +123,14 @@ const combatCommandHandler=(msg)=>{
         }
         let roll = [...Array(dices)].map(el => el = r());
         let initialRollSum = roll.reduce((a, b) => a + b, 0);
-        let line= `roll: [${decorateRoll(roll, dices)}] = ${initialRollSum}`;
-        if (initialRollSum>16)
-            line=`${line} **critical success !!!** `;
-        if (initialRollSum<5)
-            line=`${line} **critical failure !!!** `;
+        let line = `roll: [${decorateRoll(roll, dices)}] = ${initialRollSum}`;
+        if (initialRollSum > 16)
+            line = `${line} **critical success !!!** `;
+        if (initialRollSum < 5)
+            line = `${line} **critical failure !!!** `;
 
-        if (initialRollSum<=environment.autofail) {
-            line=`${line} **autofail**`;
+        if (initialRollSum <= environment.autofail) {
+            line = `${line} **autofail**`;
             sendMsg(msg, line);
             return;
         }
@@ -135,16 +145,16 @@ const combatCommandHandler=(msg)=>{
         sendMsg(msg, 'how many?');
     }
 }
-const environmentCommandHandler=(msg)=>{
+const environmentCommandHandler = (msg) => {
     let args = msg.content.match(/!env\s*((autofail\s(\d+))*(clear)*(list)*)\s*/i);
     if (args) {
-        
+
         if (args[1] === 'clear') {
             environment = new Environment();
             msg.reply(`environment restored to default values`);
             return;
         }
-        else if (args[1]=== '') {
+        else if (args[1] === '') {
             msg.reply(`**environment**\nautofail=${environment.autofail}`);
             return;
         }
