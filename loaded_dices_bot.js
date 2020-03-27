@@ -3,7 +3,7 @@ const client = new discord.Client();
 const parser = require('discord-command-parser');
 require('dotenv').config();
 const prefix = '!';
-const localVariablesMap={};
+const localVariablesMap = {};
 client.on('ready', () => {
     console.log(`Connected as ${client.user.tag}`);
     client.user.setActivity('Loading dices');
@@ -19,33 +19,33 @@ client.on('message', msg => {
     if (msg.author.bot) return;
     if (!parsed.success) return;
     if (parsed.command === 'var') {
-        const author= msg.author.id;
+        const author = msg.author.id;
 
         if (!localVariablesMap.hasOwnProperty(author))
-            localVariablesMap[author]={};
-        let args=msg.content.match(/!var\s*([a-z]+)\s+(\S+)/i);
-        if (args){
-            localVariablesMap[author][args[1]]=parseInt(args[2]);
-            sendMsg(msg,`added ${args[1]}=${args[2]} for ${author}`);
+            localVariablesMap[author] = {};
+        let args = msg.content.match(/!var\s*([a-z]+)\s+(\S+)/i);
+        if (args) {
+            localVariablesMap[author][args[1]] = parseInt(args[2]);
+            sendMsg(msg, `added ${args[1]}=${args[2]} for ${author}`);
         }
 
     }
     if (parsed.command === 'c') {
-        let args=msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
-        let dices =parseInt(args[1] || "3");
-        let variable=args[2] || "<not exists>";
-        let sign=(args[3]==="-")?-1:1;
-        let mod=parseInt(args[4] || "0");
-        mod=sign*mod;
+        let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
+        let dices = parseInt(args[1] || "3");
+        let variable = args[2] || "<not exists>";
+        let sign = (args[3] === "-") ? -1 : 1;
+        let mod = parseInt(args[4] || "0");
+        mod = sign * mod;
 
         if (dices > 0) {
-            const bonus=getVariable(msg.author.id,variable);
-            if (bonus!==0){
-                sendMsg(msg,`using ${variable}=${bonus}`); 
-                mod=mod+bonus;
+            const bonus = getVariable(msg.author.id, variable);
+            if (bonus !== 0) {
+                sendMsg(msg, `using ${variable}=${bonus}`);
+                mod = mod + bonus;
             }
-            sendMsg(msg,  combatRoll(dices,mod), args);
-           
+            sendMsg(msg, combatRoll(dices, mod), args);
+
         } else {
             sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
@@ -154,28 +154,28 @@ client.on('message', msg => {
 const r = () => {
     return Math.ceil(Math.random() * 6)
 }
-const getVariable=(author,varName)=>{
+const getVariable = (author, varName) => {
     if (localVariablesMap.hasOwnProperty(author))
         if (localVariablesMap[author].hasOwnProperty(varName))
             return localVariablesMap[author][varName];
     return 0;
 }
-const combatRoll=(dices, mod)=>{
+const combatRoll = (dices, mod) => {
     let sum = 0;
     let reply = '';
     for (let i = 0; i < dices; i++) {
         const roll = r();
         sum += roll;
-        if (i>0)
+        if (i > 0)
             reply += ';';
         reply += roll;
     }
-    
+
     console.log(dices, mod);
     let line = `roll: [${reply}] = ${sum}`;
-    if (mod!=0)
-        line =`${line} ${(mod>0)?'+'+mod:mod}=${sum+mod}`;
-        
+    if (mod != 0)
+        line = `${line} ${(mod > 0) ? '+' + mod : mod}=${sum + mod}`;
+
     return line;
 }
 client.login(process.env.API_KEY);

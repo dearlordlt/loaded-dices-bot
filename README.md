@@ -20,6 +20,18 @@ translates to:
 1) !c 3 + 18
 2) !c 3 + 15
 ```
+list all variables:
+```
+> !var
+```
+translates to:
+```
+variables for {user}:
+bow 18
+evade 20
+sword 15
+```
+
 ### context
 sets context to all rolls e.g. 
 ```
