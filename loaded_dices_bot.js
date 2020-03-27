@@ -22,7 +22,7 @@ const varCommandHandler=(msg)=>{
 
     if (!localVariablesMap.hasOwnProperty(author))
         localVariablesMap[author] = {};
-     args= msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
+    let args= msg.content.match(/!var\s*((list)*(clear)*)\s*/i);
     if(args){
         if (args[1]==='list'){
             let lines='';
@@ -39,7 +39,7 @@ const varCommandHandler=(msg)=>{
         }
 
     }
-    let args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
+    args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
     if (args) {
         if (args[2]){
             localVariablesMap[author][args[1]] = parseInt(args[2]);
