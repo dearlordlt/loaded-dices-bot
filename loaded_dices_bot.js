@@ -123,8 +123,8 @@ client.on('message', msg => {
         const successValue = roll.filter(el => el > 3).length;
 
         let message = successDice && sum > 7 ? 'success' : 'failure';
-        (initialRollSum >= 17) ? message = `**critical success !!!** ${Rules.getMagicFortune(initialRollSum, 'spell')}` : null;
-        (initialRollSum <= 4) ? message = `**critical failure !!!** ${Rules.getMagicMisfortune(initialRollSum, 'spell')}` : null;
+        (initialRollSum >= 17) ? message = `**critical success !!!** ${Rules.getMagicFortune(r(), initialRollSum)}` : null;
+        (initialRollSum <= 4) ? message = `**critical failure !!!** ${Rules.getMagicMisfortune(r(), initialRollSum)}` : null;
 
         let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
