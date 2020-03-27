@@ -34,7 +34,7 @@ client.on('message', msg => {
         combatCommandHandler(msg);
         return;
     }
-    if (parsed.command === 'ctx') {
+    if (parsed.command === 'env') {
         environmentCommandHandler(msg);
         return;
     }
