@@ -103,6 +103,7 @@ client.on('message', msg => {
         let roll = [...Array(3)].map(el => el = r());
         let debug = false;
         let dices = 3;
+        const initialRollSum = roll.reduce((a, b) => a + b, 0);
 
         if (parsed.arguments[0]) {
             roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
@@ -117,8 +118,8 @@ client.on('message', msg => {
         const successValue = roll.filter(el => el > 3).length;
 
         let message = successDice && sum > 7 ? 'success' : 'failure';
-        (sum >= 17) ? message = '**critical success !!!**' : null;
-        (sum <= 4) ? message = '**critical failure !!!**' : null;
+        (initialRollSum >= 17) ? message = '**critical success !!!**' : null;
+        (initialRollSum <= 4) ? message = '**critical failure !!!**' : null;
 
         let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
