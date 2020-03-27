@@ -216,4 +216,5 @@ const combatRoll = (dices, mod) => {
 
     return line;
 }
+
 client.login(process.env.API_KEY);
