@@ -90,7 +90,7 @@ client.on('message', msg => {
             const botchDice = roll.filter(el => el === 1).length;
             const successDice = roll.filter(el => el > effectiveness).length;
 
-            let message = botchDice >= dices / 2 ? 'botch' : 'success';
+            let message = botchDice >= dices / 2 ? '**botch**' : 'success';
 
             let line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
             sendMsg(msg, line, parsed.command, parsed.arguments);
@@ -117,8 +117,8 @@ client.on('message', msg => {
         const successValue = roll.filter(el => el > 3).length;
 
         let message = successDice && sum > 7 ? 'success' : 'failure';
-        (sum >= 17) ? message = 'critical success !!!' : null;
-        (sum <= 4) ? message = 'critical failure !!!' : null;
+        (sum >= 17) ? message = '**critical success !!!**' : null;
+        (sum <= 4) ? message = '**critical failure !!!**' : null;
 
         let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
