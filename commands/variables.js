@@ -1,3 +1,4 @@
+const { sendMsg } = require('../utils');
 const variables = {
     localVariablesMap:{},
     help:()=>{

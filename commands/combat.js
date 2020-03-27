@@ -1,5 +1,5 @@
-const { r, decorateRoll } = require('../utils');
-const { variables } = requre('./variables');
+const { r, decorateRoll,sendMsg } = require('../utils');
+const { variables } = require('./variables');
 const combat={
     handle(msg, environment){
         let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);

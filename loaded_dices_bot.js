@@ -1,6 +1,6 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
-const { r, explode, decorateRoll } = require('./utils');
+const { r, explode, decorateRoll,sendMsg } = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
 const { location, printLocationHelp } = require('./commands/location');
@@ -20,10 +20,7 @@ client.on('ready', () => {
     client.user.setActivity('Loading dices');
 });
 
-const sendMsg = (msg, line, command = '', args = []) => {
-    msg.reply(line);
-    console.log(line, command, args);
-}
+
 client.on('message', msg => {
     const parsed = parser.parse(msg, prefix);
 

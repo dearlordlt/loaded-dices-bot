@@ -27,9 +27,13 @@ const explode = (arr) => {
     }
     return newArr;
 }
-
+const sendMsg = (msg, line, command = '', args = []) => {
+    msg.reply(line);
+    console.log(line, command, args);
+}
 module.exports = {
     r,
     decorateRoll,
-    explode
+    explode,
+    sendMsg
 }
