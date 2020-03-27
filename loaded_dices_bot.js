@@ -123,11 +123,54 @@ client.on('message', msg => {
         const successValue = roll.filter(el => el > 3).length;
 
         let message = successDice && sum > 7 ? 'success' : 'failure';
-        (initialRollSum >= 17) ? message = '**critical success !!!**' : null;
-        (initialRollSum <= 4) ? message = '**critical failure !!!**' : null;
+        (initialRollSum >= 17) ? message = `**critical success !!!** ${Rules.getMagicFortune(initialRollSum, 'spell')}` : null;
+        (initialRollSum <= 4) ? message = `**critical failure !!!** ${Rules.getMagicMisfortune(initialRollSum, 'spell')}` : null;
 
         let line = `roll 3d: [${decorateRoll(roll, dices)}] = ${successValue}; ${message} ${debug ? ', this is fake roll' : ''}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
+    }
+
+    if (parsed.command === 'l') {
+        const roll = r();
+        let line = `${roll} hits ${Rules.getLocation(6)}`;
+        sendMsg(msg, line, parsed.command, parsed.arguments);
+    }
+
+    if (parsed.command === 'crit') {
+        const roll = r();
+        const type = parsed.arguments[0] || 'melee'; //melee, ranged, spell
+        const value = parsed.arguments[1] || '17'; //3, 4, 17, 18
+        let err = false;
+
+        if (type != 'melee' && type != 'ranged' && type != 'spell') {
+            sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, parsed.command, parsed.arguments);
+            err = true;
+        }
+
+        if (value != '3' && value != '4' && value != '17' && value != '18') {
+            sendMsg(msg, `wrong value: ${value}, must be 3, 4, 17 or 18`, parsed.command, parsed.arguments);
+            err = true;
+        }
+
+        let message = '';
+
+        if (type === 'melee') {
+            if (value == 17 || value == 18) message = Rules.getMeleeFortune(roll, value);
+            if (value == 3 || value == 4) message = Rules.getMeleeMisfortune(roll, value);
+        }
+
+        if (type === 'ranged') {
+            if (value == 17 || value == 18) message = Rules.getRangedFortune(roll, value);
+            if (value == 3 || value == 4) message = Rules.getRangedMisfortune(roll, value);
+        }
+
+        if (type === 'spell') {
+            if (value == 17 || value == 18) message = Rules.getMagicFortune(roll, value);
+            if (value == 3 || value == 4) message = Rules.getMagicMisfortune(roll, value);
+        }
+
+        let line = `roll - ${roll}: ${message}`;
+        !err && sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
     if (parsed.command === 'h') {
@@ -148,6 +191,8 @@ client.on('message', msg => {
             !spell //rolls 3d spell roll
           **OTHER:**
             !rules //links to resources
+            !l //roll unaimed location
+            !crit melee|ranged|spell 3|4|17|18
         `);
     }
 
