@@ -1,10 +1,12 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
-const { r } = require('./utils');
+const { r, explode, decorateRoll } = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
 const { location } = require('./commands/location');
 const { spell } = require('./commands/spell');
+const { social } = require('./commands/social');
+const { damage } = require('./commands/damage');
 require('dotenv').config();
 
 const client = new discord.Client();
@@ -38,51 +40,11 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'd') {
-        const dices = parseInt(parsed.arguments[0]);
-
-        if (!parsed.arguments[1]) {
-            const line = 'choose effects, a.e. !d 3 BBT';
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-            return;
-        }
-
-        const damage = parsed.arguments[1].split('');
-
-        if (dices > 0) {
-            let arr6 = [...Array(6)].map(e => e = damage.pop() || '').reverse();
-            let reply = '';
-            let effects = '';
-            for (let i = 0; i < dices; i++) {
-                const roll = r();
-                effects += arr6[roll - 1] ? arr6[roll - 1] : '';
-                reply += roll + ',';
-            }
-            const line = `roll ${dices}d and damage ${parsed.arguments[1]}: Result (${effects}), Roll (${reply})`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        } else {
-            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
-        }
+        damage(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 's') {
-        const dices = parseInt(parsed.arguments[0]);
-        const effectiveness = parseInt(parsed.arguments[1]) || 4;
-
-        if (dices > 0) {
-            let roll = [...Array(dices)].map(el => el = r());
-
-            roll = [...roll, ...explode(roll)];
-
-            const botchDice = roll.filter(el => el === 1).length;
-            const successDice = roll.filter(el => el >= effectiveness).length;
-
-            let message = botchDice >= dices / 2 ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
-
-            let line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        } else {
-            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
-        }
+        social(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'spell') {
@@ -241,32 +203,6 @@ const printVarHelp = () => {
             !var list //list all variables for user
             !var clear //clear all variable for user
             !var bow //removes only bow variable`;
-}
-
-const decorateRoll = (roll, dices = 3) => {
-    console.log(roll);
-    roll = roll.map((el, index) => {
-        if (index >= dices) {
-            return `**${el}**`
-        }
-        else if (el === 6) {
-            return `__${el}__`
-        }
-        else if (el === 1) {
-            return `~~${el}~~`
-        } else {
-            return el;
-        }
-    });
-    return roll;
-}
-
-const explode = (arr) => {
-    let newArr = [...Array(arr.filter(el => el === 6).length)].map(el => el = r());
-    if (newArr.some(el => el === 6)) {
-        newArr = [...newArr, ...explode(newArr)];
-    }
-    return newArr;
 }
 
 const getVariable = (author, varName) => {
