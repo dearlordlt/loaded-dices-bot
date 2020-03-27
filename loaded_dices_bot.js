@@ -1,10 +1,11 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
-const { r } = require('./utils');
+const { r, explode, decorateRoll } = require('./utils');
 const { crit } = require('./commands/crit');
 const { sublocation } = require('./commands/sublocation');
 const { location } = require('./commands/location');
 const { spell } = require('./commands/spell');
+const { social } = require('./commands/social');
 
 require('dotenv').config();
 
@@ -78,24 +79,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 's') {
-        const dices = parseInt(parsed.arguments[0]);
-        const effectiveness = parseInt(parsed.arguments[1]) || 4;
-
-        if (dices > 0) {
-            let roll = [...Array(dices)].map(el => el = r());
-
-            roll = [...roll, ...explode(roll)];
-
-            const botchDice = roll.filter(el => el === 1).length;
-            const successDice = roll.filter(el => el >= effectiveness).length;
-
-            let message = botchDice >= dices / 2 ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
-
-            let line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        } else {
-            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
-        }
+        social(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 'spell') {
@@ -190,32 +174,6 @@ const printVarHelp = () => {
             !var list //list all variables for user
             !var clear //clear all variable for user
             !var bow //removes only bow variable`;
-}
-
-const decorateRoll = (roll, dices = 3) => {
-    console.log(roll);
-    roll = roll.map((el, index) => {
-        if (index >= dices) {
-            return `**${el}**`
-        }
-        else if (el === 6) {
-            return `__${el}__`
-        }
-        else if (el === 1) {
-            return `~~${el}~~`
-        } else {
-            return el;
-        }
-    });
-    return roll;
-}
-
-const explode = (arr) => {
-    let newArr = [...Array(arr.filter(el => el === 6).length)].map(el => el = r());
-    if (newArr.some(el => el === 6)) {
-        newArr = [...newArr, ...explode(newArr)];
-    }
-    return newArr;
 }
 
 const getVariable = (author, varName) => {
