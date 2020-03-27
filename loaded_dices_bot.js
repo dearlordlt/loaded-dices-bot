@@ -154,37 +154,32 @@ client.on('message', msg => {
         const roll = r();
         const type = parsed.arguments[0] || 'melee'; //melee, ranged, spell
         const value = parsed.arguments[1] || '17'; //3, 4, 17, 18
-        let err = false;
 
         if (type != 'melee' && type != 'ranged' && type != 'spell') {
             sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, parsed.command, parsed.arguments);
-            err = true;
-        }
-
-        if (value != '3' && value != '4' && value != '17' && value != '18') {
+        } else if (value != '3' && value != '4' && value != '17' && value != '18') {
             sendMsg(msg, `wrong value: ${value}, must be 3, 4, 17 or 18`, parsed.command, parsed.arguments);
-            err = true;
+        } else {
+            let message = '';
+
+            if (type === 'melee') {
+                if (value == 17 || value == 18) message = Rules.getMeleeFortune(roll, value);
+                if (value == 3 || value == 4) message = Rules.getMeleeMisfortune(roll, value);
+            }
+
+            if (type === 'ranged') {
+                if (value == 17 || value == 18) message = Rules.getRangedFortune(roll, value);
+                if (value == 3 || value == 4) message = Rules.getRangedMisfortune(roll, value);
+            }
+
+            if (type === 'spell') {
+                if (value == 17 || value == 18) message = Rules.getMagicFortune(roll, value);
+                if (value == 3 || value == 4) message = Rules.getMagicMisfortune(roll, value);
+            }
+
+            let line = `roll - ${roll}: ${message}`;
+            sendMsg(msg, line, parsed.command, parsed.arguments);
         }
-
-        let message = '';
-
-        if (type === 'melee') {
-            if (value == 17 || value == 18) message = Rules.getMeleeFortune(roll, value);
-            if (value == 3 || value == 4) message = Rules.getMeleeMisfortune(roll, value);
-        }
-
-        if (type === 'ranged') {
-            if (value == 17 || value == 18) message = Rules.getRangedFortune(roll, value);
-            if (value == 3 || value == 4) message = Rules.getRangedMisfortune(roll, value);
-        }
-
-        if (type === 'spell') {
-            if (value == 17 || value == 18) message = Rules.getMagicFortune(roll, value);
-            if (value == 3 || value == 4) message = Rules.getMagicMisfortune(roll, value);
-        }
-
-        let line = `roll - ${roll}: ${message}`;
-        !err && sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
     if (parsed.command === 'h') {
