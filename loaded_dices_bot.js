@@ -7,6 +7,7 @@ const { location } = require('./commands/location');
 const { spell } = require('./commands/spell');
 const { social } = require('./commands/social');
 const { damage } = require('./commands/damage');
+const { crit, printCritHelp } = require('./commands/crit');
 require('dotenv').config();
 
 const client = new discord.Client();
@@ -94,9 +95,9 @@ client.on('message', msg => {
             !env //prints current environment
             !env clear //restores default
             !env autofail 9 //sets autofail to 9
+          ${printCritHelp()}
           **OTHER:**
             !rules //links to resources
-            !crit melee|ranged|spell 3|4|17|18
         `);
     }
 

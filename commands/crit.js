@@ -33,6 +33,12 @@ const crit = (args, command, sendMsg, msg) => {
     }
 }
 
+const printCritHelp = () => {
+    return `**CRIT**
+            !crit melee|ranged|spell 3|4|17|18`;
+}
+
 module.exports = {
     crit,
+    printCritHelp
 }
