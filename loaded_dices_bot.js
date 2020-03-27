@@ -129,6 +129,11 @@ client.on('message', msg => {
 
     if (parsed.command === 'spell') {
         const roll = [...Array(3)].map(el => el = r());
+
+        if (parsed.arguments[0]) {
+            roll = parsed.arguments[0].split('').map(el => el = parseInt(el));
+        }
+
         const sum = roll.reduce((a, b) => a + b, 0);
         const successDice = roll.some(el => el > 3);
 
