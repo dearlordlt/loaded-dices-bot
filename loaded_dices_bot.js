@@ -127,6 +127,19 @@ client.on('message', msg => {
         }
     }
 
+    if (parsed.command === 'spell') {
+        const roll = [...Array(3)].map(el => el = r());
+        const sum = roll.reduce((a, b) => a + b, 0);
+        const successDice = roll.some(el => el > 3);
+
+        let message = successDice && sum > 7 ? 'success' : 'failure';
+        (sum >= 17) ? message = 'critical success !!!' : null;
+        (sum <= 4) ? message = 'critical failure !!!' : null;
+
+        let line = `roll 3d: [${roll}] = ${sum}; ${message}`;
+        sendMsg(msg, line, parsed.command, parsed.arguments);
+    }
+
     if (parsed.command === 'h') {
         msg.reply(`
           COMBAT:
@@ -138,6 +151,11 @@ client.on('message', msg => {
             !s 3 //3d6 when 4 and more is success
           DAMAGE:
             !d 3 BBC //3d when 4 is B, 5 is B and 6 is C
+          VAR:
+            !var bow 18 //sets bow to 18 for user
+            !c bow //rolls 3d + bow
+          SPELL:
+            !spell //rolls 3d spell roll
           OTHER:
             !rules //links to resources
         `);
