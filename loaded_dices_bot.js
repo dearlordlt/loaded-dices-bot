@@ -20,27 +20,39 @@ client.on('message', msg => {
     if (!parsed.success) return;
 
     if (parsed.command === 'c') {
-        let dices = parseInt(parsed.arguments[0]) || 3;
-        let hasBonus = false;
-        if (parsed.arguments[0] && parsed.arguments[0].charAt(0) === '+') {
-            dices = 3;
-            hasBonus = parseInt(parsed.arguments[0].replace('+', ''));
-        }
+        let args=msg.match(/!c \s*(\d)*\s*([+-])*\s*(\d)*/i);
+        let dices =parseInt(args[1] || "3");
+        // let hasBonus = false;
+        // if (parsed.arguments[0] && parsed.arguments[0].charAt(0) === '+') {
+        //     dices = 3;
+        //     hasBonus = parseInt(parsed.arguments[0].replace('+', ''));
+        // }
         if (dices > 0) {
             let sum = 0;
             let reply = '';
             for (let i = 0; i < dices; i++) {
                 const roll = r();
                 sum += roll;
-                reply += roll + ',';
+                if (i>0)
+                    reply += ';';
+                reply += roll;
             }
-            if (parsed.arguments[1] === '+') {
-                sum = sum + parseInt(parsed.arguments[2]);
-            }
-            if (hasBonus) {
-                sum = sum + hasBonus;
-            }
-            const line = `roll: (${reply}) = ${sum}`;
+            // if (parsed.arguments[1] === '+') {
+            //     sum = sum + parseInt(parsed.arguments[2]);
+            // }
+            // if (hasBonus) {
+            //     sum = sum + hasBonus;
+            // }
+            let sign=(args[2]==="-")?-1:1;
+            let mod=parseInt(args[3] || "0");
+            
+            sum = sum;
+            mod=sign*mod;
+            
+            let line = `roll: [${reply}] = ${sum}`;
+            if (mod!=0)
+                line =`${line} ${(mod>0)?'+'+mod:mod}=${sum+mod}`;
+                
             sendMsg(msg, line, parsed.command, parsed.arguments);
         } else {
             sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
