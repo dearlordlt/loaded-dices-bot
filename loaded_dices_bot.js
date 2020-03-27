@@ -136,7 +136,7 @@ client.on('message', msg => {
         (sum >= 17) ? message = 'critical success !!!' : null;
         (sum <= 4) ? message = 'critical failure !!!' : null;
 
-        let line = `roll 3d: [${roll}] = ${sum}; ${message}`;
+        let line = `roll 3d: [${roll}] = ${successDice}; ${message}`;
         sendMsg(msg, line, parsed.command, parsed.arguments);
     }
 
