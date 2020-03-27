@@ -128,21 +128,21 @@ client.on('message', msg => {
 
     if (parsed.command === 'h') {
         msg.reply(`
-          COMBAT:
+          **COMBAT:**
             !c 3 + 10 //3d6 + 10
             !c + 10 //3d6 + 10
             !c //3d6
-          SOCIAL:
+          **SOCIAL:**
             !s 5 4 //5d6 when 4 and more is success
             !s 3 //3d6 when 4 and more is success
-          DAMAGE:
+          **DAMAGE:**
             !d 3 BBC //3d when 4 is B, 5 is B and 6 is C
-          VAR:
+          **VAR:**
             !var bow 18 //sets bow to 18 for user
             !c bow //rolls 3d + bow
-          SPELL:
+          **SPELL:**
             !spell //rolls 3d spell roll
-          OTHER:
+          **OTHER:**
             !rules //links to resources
         `);
     }
