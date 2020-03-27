@@ -20,7 +20,7 @@ client.on('message', msg => {
     if (!parsed.success) return;
 
     if (parsed.command === 'c') {
-        let args=msg.content.match(/!c \s*(\d)*\s*([+-])*\s*(\d)*/i);
+        let args=msg.content.match(/!c\s*(\d)*\s*([+-])*\s*(\d)*/i);
         let dices =parseInt(args[1] || "3");
         // let hasBonus = false;
         // if (parsed.arguments[0] && parsed.arguments[0].charAt(0) === '+') {
