@@ -36,11 +36,28 @@ class Variables {
             }
 
         }
-        args = msg.content.match(/!var\s*([a-z]+)\s*(\S*)/i);
+        args = msg.content.match(/!var\s*([a-z]+)(\[(\d+)\])*\s*(\S*)\s*([+-]{2}(\d))*/i);
         if (args) {
-            if (args[2]) {
-                this.localVariablesMap[author][args[1]] = parseInt(args[2]);
-                sendMsg(msg, `added ${args[1]}=${args[2]}`);
+            if (args[4]) {
+                let idx=1;
+                let cnt=0;
+                if (args[3])
+                    cnt=parseInt(args[3]);
+                let r=0;
+                if(args[6])
+                    r=parseInt(args[6]);
+                let val=parseInt(args[2]);
+                
+                if(cnt===0){
+                    this.localVariablesMap[author][args[1]] =this.modValue(val,r);
+                    sendMsg(msg, `added ${args[1]}=${val}`);
+                }else{
+                    for(let idx=1;idx<=cnt;idx++){
+                        const name=args[1]+idx;
+                        this.localVariablesMap[author][name] =this.modValue(val,r);
+                    sendMsg(msg, `added ${name}=${val}`);
+                    }
+                }
             }
             else if (args[1] in this.localVariablesMap[author]) {
                 delete this.localVariablesMap[author][args[1]];
@@ -51,7 +68,11 @@ class Variables {
         //print help
         sendMsg(msg, this.help());
     }
+    modValue(value,r){
+        return value+Math.round(Math.random() * r * 2) - r;
+    }
 }
+
 const variables=new Variables();
 module.exports = {
     variables,
