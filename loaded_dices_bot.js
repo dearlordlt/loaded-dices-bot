@@ -90,7 +90,7 @@ client.on('message', msg => {
             const botchDice = roll.filter(el => el === 1).length;
             const successDice = roll.filter(el => el >= effectiveness).length;
 
-            let message = botchDice >= dices / 2 ? '**botch**' : 'success';
+            let message = botchDice >= dices / 2 ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
 
             let line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
             sendMsg(msg, line, parsed.command, parsed.arguments);
