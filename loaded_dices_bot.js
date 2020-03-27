@@ -1,6 +1,7 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
 const { Rules } = require('./ajax-rules.js');
+const { crit } = require('./commands/crit');
 
 require('dotenv').config();
 
@@ -142,35 +143,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'crit') {
-        const roll = r();
-        const type = parsed.arguments[0]; //melee, ranged, spell
-        const value = parsed.arguments[1]; //3, 4, 17, 18
-
-        if (type != 'melee' && type != 'ranged' && type != 'spell') {
-            sendMsg(msg, `unknown type: ${type}, must be melee, ranged or spell`, parsed.command, parsed.arguments);
-        } else if (value != '3' && value != '4' && value != '17' && value != '18') {
-            sendMsg(msg, `wrong value: ${value}, must be 3, 4, 17 or 18`, parsed.command, parsed.arguments);
-        } else {
-            let message = '';
-
-            if (type === 'melee') {
-                if (value == 17 || value == 18) message = Rules.getMeleeFortune(roll, value);
-                if (value == 3 || value == 4) message = Rules.getMeleeMisfortune(roll, value);
-            }
-
-            if (type === 'ranged') {
-                if (value == 17 || value == 18) message = Rules.getRangedFortune(roll, value);
-                if (value == 3 || value == 4) message = Rules.getRangedMisfortune(roll, value);
-            }
-
-            if (type === 'spell') {
-                if (value == 17 || value == 18) message = Rules.getMagicFortune(roll, value);
-                if (value == 3 || value == 4) message = Rules.getMagicMisfortune(roll, value);
-            }
-
-            let line = `roll - ${roll}: ${message}`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        }
+        crit(parsed.arguments, parsed.command, sendMsg);
     }
 
     if (parsed.command === 'h') {
