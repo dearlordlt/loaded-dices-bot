@@ -6,6 +6,7 @@ const { sublocation } = require('./commands/sublocation');
 const { location } = require('./commands/location');
 const { spell } = require('./commands/spell');
 const { social } = require('./commands/social');
+const { damage } = require('./commands/damage');
 
 require('dotenv').config();
 
@@ -52,30 +53,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'd') {
-        const dices = parseInt(parsed.arguments[0]);
-
-        if (!parsed.arguments[1]) {
-            const line = 'choose effects, a.e. !d 3 BBT';
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-            return;
-        }
-
-        const damage = parsed.arguments[1].split('');
-
-        if (dices > 0) {
-            let arr6 = [...Array(6)].map(e => e = damage.pop() || '').reverse();
-            let reply = '';
-            let effects = '';
-            for (let i = 0; i < dices; i++) {
-                const roll = r();
-                effects += arr6[roll - 1] ? arr6[roll - 1] : '';
-                reply += roll + ',';
-            }
-            const line = `roll ${dices}d and damage ${parsed.arguments[1]}: Result (${effects}), Roll (${reply})`;
-            sendMsg(msg, line, parsed.command, parsed.arguments);
-        } else {
-            sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
-        }
+        damage(parsed.arguments, parsed.command, sendMsg, msg);
     }
 
     if (parsed.command === 's') {
