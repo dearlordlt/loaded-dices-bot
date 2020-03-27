@@ -83,45 +83,17 @@ client.on('message', msg => {
         const effectiveness = parseInt(parsed.arguments[1]) || 4;
 
         if (dices > 0) {
-            let reply = '';
-            let successes = 0;
-            let rerolls = 0;
-            let botch = false;
-            let botchRoll = 0;
-            for (let i = 0; i < dices; i++) {
-                const roll = r();
-                if (roll >= effectiveness) {
-                    successes += 1;
-                }
-                if (roll === 6) {
-                    rerolls += 1;
-                }
-                if (roll === 1) {
-                    botchRoll += 1;
-                    botch = true;
-                }
-                reply += roll + ',';
-            }
-            if (!botch) {
-                for (let i = 0; i < rerolls; i++) {
-                    const roll = r();
-                    if (roll >= effectiveness) {
-                        successes += 1;
-                    }
-                    if (roll === 6) {
-                        rerolls += 1;
-                    }
-                    reply += '+' + roll + ',';
-                }
-            }
-            if (botchRoll >= dices / 2) {
-                const line = `roll ${dices}d: (${reply}) = Botch roll!`;
-                sendMsg(msg, line, parsed.command, parsed.arguments);
-            } else {
-                const line = `roll ${dices}d: (${reply}) = ${successes} with effectiveness of ${effectiveness}`;
-                sendMsg(msg, line, parsed.command, parsed.arguments);
-            }
+            let roll = [...Array(dices)].map(el => el = r());
 
+            roll = [...roll, ...explode(roll)];
+
+            const botchDice = roll.filter(el => el === 1).length;
+            const successDice = roll.filter(el => el > effectiveness).length;
+
+            let message = botchDice >= dices / 2 ? 'botch' : 'success';
+
+            let line = `roll ${dices}d: [${roll}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
+            sendMsg(msg, line, parsed.command, parsed.arguments);
         } else {
             sendMsg(msg, 'how many?', parsed.command, parsed.arguments);
         }
