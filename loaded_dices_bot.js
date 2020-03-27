@@ -26,7 +26,7 @@ client.on('message', msg => {
         let args=msg.content.match(/!var\s*([a-z]+)\s+(\S+)/i);
         if (args){
             localVariablesMap[author][args[1]]=parseInt(args[2]);
-            sendMsg(`added ${args[1]}=${args[2]} for ${author}`);
+            sendMsg(msg,`added ${args[1]}=${args[2]} for ${author}`);
         }
 
     }
@@ -41,7 +41,7 @@ client.on('message', msg => {
         if (dices > 0) {
             const bonus=getVariable(msg.author.id,variable);
             if (bonus!==0){
-                sendMsg(`using ${variable}=${bonus}`); 
+                sendMsg(msg,`using ${variable}=${bonus}`); 
                 mod=mod+bonus;
             }
             sendMsg(msg,  combatRoll(dices,mod), args);
