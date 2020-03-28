@@ -19,6 +19,8 @@ const { playerManager } = require('./playerManager');
 const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
 
+const characters = require('./routes/characters');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -139,6 +141,8 @@ client.login(process.env.API_KEY);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }));
+
+app.use('characters', characters);
 
 app.get('/', (req, res) => res.send('Kill all humans! all bots unite!!'));
 
