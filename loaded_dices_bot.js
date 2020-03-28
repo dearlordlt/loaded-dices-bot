@@ -9,7 +9,10 @@ const { social, printSocialHelp } = require('./commands/social');
 const { damage, printDamageHelp } = require('./commands/damage');
 const { variables } = require('./commands/variables');
 const { combat } = require('./commands/combat');
+const { playerManager } = require('./playerManager');
+
 const { crit, printCritHelp } = require('./commands/crit');
+player = require('')
 require('dotenv').config();
 
 const client = new discord.Client();
@@ -27,6 +30,10 @@ client.on('message', msg => {
     if (msg.author.bot) return;
     if (!parsed.success) return;
 
+    if (parsed.command === 'player'){
+        playerManager.getPlayer(msg.author.id).handle(msg);
+        return;
+    }
     if (parsed.command === 'var') {
         variables.handle(msg);
         return;
