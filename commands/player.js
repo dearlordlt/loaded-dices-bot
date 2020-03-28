@@ -41,5 +41,5 @@ class Player {
     }
 }
 module.exports = {
-    Palyer,
+    Player,
 }
