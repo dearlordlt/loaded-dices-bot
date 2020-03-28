@@ -4,7 +4,8 @@ const { MessageAttachment } = require('discord.js');
 const fs = require('fs');
 const { sendMsg } = require('../utils');
 
-const playerModel = mongoose.model('Player', {
+const PlayerModel = mongoose.model('Player', {
+  playerId: Number,
   name: String,
   attr: {
     str: Number,
@@ -15,32 +16,36 @@ const playerModel = mongoose.model('Player', {
     will: Number,
   },
   combatSkills: {
-
   },
 });
 
 class Player {
-  constructor(name) {
+  constructor(playerId, name) {
     this.name = name;
-    // this.fileName = `./localDb/chars/${this.name}.json`;
+    this.playerId = playerId;
+    this.model = {};
 
-    this.attr = {
-      str: 10,
-      sta: 10,
-      dex: 10,
-      ref: 10,
-      per: 10,
-      will: 10,
-    };
-    this.combatSkills = {
-
-    };
-
-    /* if (fs.existsSync(this.fileName)) {
-      const info = JSON.parse(fs.readFileSync(this.fileName));
-      this.attr = info.attr;
-      this.combatSkills = info.combatSkills;
-    } */
+    PlayerModel.findOne({ playerId, name }, (err, player) => {
+      if (player == null) {
+        this.model = PlayerModel.create({
+          playerId: this.playerId,
+          name: this.name,
+          attr: {
+            str: 0,
+            sta: 0,
+            dex: 0,
+            ref: 0,
+            per: 0,
+            will: 0,
+          },
+          combatSkills: {},
+        }, () => {
+          // saved!
+        });
+      } else {
+        this.model = player;
+      }
+    });
   }
 
   print() {
@@ -52,12 +57,12 @@ class Player {
   printAttr() {
     return `
         **ATTRIBUTES**
-            str:${this.attr.str}
-            sta:${this.attr.sta}
-            dex:${this.attr.dex}
-            ref:${this.attr.ref}
-            per:${this.attr.per}
-            will:${this.attr.will}`;
+            str:${this.model.attr.str}
+            sta:${this.model.attr.sta}
+            dex:${this.model.attr.dex}
+            ref:${this.model.attr.ref}
+            per:${this.model.attr.per}
+            will:${this.model.attr.will}`;
   }
 
   printCombatSkills() {
@@ -67,7 +72,7 @@ class Player {
   }
 
   setAttr(name, value) {
-    this.attr[name] = value;
+    this.model.attr[name] = value;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -85,23 +90,8 @@ class Player {
   }
 
   save() {
-    /* fs.writeFileSync(this.fileName, JSON.stringify({
-      attr: this.attr,
-      combatSkills: this.combatSkills,
-    })); */
-    playerModel.create({
-      name: this.name,
-      attr: {
-        str: this.attr.str,
-        sta: this.attr.sta,
-        dex: this.attr.dex,
-        ref: this.attr.ref,
-        per: this.attr.per,
-        will: this.attr.will,
-      },
-      combatSkills: {},
-    }, () => {
-      // saved!
+    PlayerModel.update({ playerId: this.playerId, name: this.name }, this.model, () => {
+
     });
   }
 
@@ -240,7 +230,7 @@ class PlayerManager {
 
   getPlayer(id, name) {
     if (!(id in this.localPlayers)) {
-      this.localPlayers[id] = new Player(name);
+      this.localPlayers[id] = new Player(id, name);
     }
 
     return this.localPlayers[id];
@@ -250,5 +240,5 @@ class PlayerManager {
 module.exports = {
   Player,
   playerManager: new PlayerManager(),
-  playerModel,
+  PlayerModel,
 };
