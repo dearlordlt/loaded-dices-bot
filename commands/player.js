@@ -1,5 +1,5 @@
 const { sendMsg } = require('../utils');
-const { Client, MessageAttachment } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
 const fs = require('fs');
 
 class Player {
@@ -19,8 +19,8 @@ class Player {
             
         };
         
-        if (fs.existsSync(fileName)){
-            const info=JSON.parse( fs.readFileSync(fileName));
+        if (fs.existsSync(this.fileName)){
+            const info=JSON.parse( fs.readFileSync(this.fileName));
             this.attr = info.attr;
             this.combatSkills = info.combatSkills;
         }
