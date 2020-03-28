@@ -28,11 +28,13 @@ client.on('message', msg => {
     const parsed = parser.parse(msg, prefix);
     if (!parsed.success) return;
 
-    contextManager.getUserContext(msg.author.id).push(msg);
+    
 
     if(parsed.command ==='luck'){
         //reroll the last user command
         msg=contextManager.getUserContext(msg.author.id).pop();
+    }else{
+        contextManager.getUserContext(msg.author.id).push(msg);
     }
 
     if (parsed.command === 'p'){
