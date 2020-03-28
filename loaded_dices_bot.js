@@ -1,5 +1,9 @@
+require('dotenv').config();
+
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
+const express = require('express')
+
 const { sendMsg } = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
@@ -12,7 +16,9 @@ const { combat } = require('./commands/combat');
 const { playerManager } = require('./playerManager');
 const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
-require('dotenv').config();
+
+const app = express()
+const port = process.env.PORT
 
 const client = new discord.Client();
 const prefix = '!';
@@ -137,3 +143,7 @@ const environmentCommandHandler = (msg) => {
 }
 
 client.login(process.env.API_KEY);
+
+app.get('/', (req, res) => res.send('Kill all humans! all bots unite!!'))
+
+app.listen(port, () => console.log(`Loaded dice bot is listening on port ${port}!`))
