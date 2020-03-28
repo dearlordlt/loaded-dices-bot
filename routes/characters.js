@@ -1,4 +1,14 @@
 const express = require('express');
+const ejs = require('ejs');
+
+const tpl = `
+  <div>STR: <%= character.attr.str %></div>
+  <div>STR: <%= character.attr.sta %></div>
+  <div>STR: <%= character.attr.ref %></div>
+  <div>STR: <%= character.attr.dex %></div>
+  <div>STR: <%= character.attr.per %></div>
+  <div>STR: <%= character.attr.will %></div>
+`;
 
 const { PlayerModel } = require('../models/player');
 
@@ -10,7 +20,9 @@ router.get('/:id', (req, res) => {
       res.status(500).json(err);
     }
 
-    res.status(200).json(character);
+    const html = ejs.render(tpl, { character });
+
+    res.status(200).send(html);
   });
 });
 
