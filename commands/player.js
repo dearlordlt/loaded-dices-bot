@@ -32,7 +32,7 @@ class Player {
       if (player == null) {
         // eslint-disable-next-line no-console
         console.log('player not found, creating new one');
-        this.model = PlayerModel.create({
+        this.model = {
           playerId: this.playerId,
           name: this.name,
           attr: {
@@ -44,7 +44,8 @@ class Player {
             will: 0,
           },
           combatSkills: [],
-        }, () => {
+        };
+        PlayerModel.create(this.model, () => {
           // saved!
         });
       } else {
