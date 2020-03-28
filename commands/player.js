@@ -55,7 +55,8 @@ class Player {
   }
 
   printAttr() {
-    return `
+    if (this.model) {
+      return `
         **ATTRIBUTES**
             str:${this.model.attr.str}
             sta:${this.model.attr.sta}
@@ -63,11 +64,15 @@ class Player {
             ref:${this.model.attr.ref}
             per:${this.model.attr.per}
             will:${this.model.attr.will}`;
+    }
+    return '**ATTRIBUTES**';
   }
 
   printCombatSkills() {
     let lines = '**COMBAT SKILLS**\n';
-    Object.keys(this.combatSkills).forEach((skill) => lines = `${lines}\n ${skill}=${this.combatSkills[skill].lvl} attack=${this.combatSkills[skill].attack} defense=${this.combatSkills[skill].defense}`);
+    if (this.model) {
+      Object.keys(this.model.combatSkills).forEach((skill) => lines = `${lines}\n ${skill}=${this.model.combatSkills[skill].lvl} attack=${this.model.combatSkills[skill].attack} defense=${this.model.combatSkills[skill].defense}`);
+    }
     return lines;
   }
 
@@ -166,19 +171,19 @@ class Player {
   }
 
   getOrCreateCombatSkill(name) {
-    if (!(name in this.combatSkills)) {
-      this.combatSkills[name] = {
+    if (!(name in this.model.combatSkills)) {
+      this.model.combatSkills[name] = {
         lvl: 0,
         attack: 'ref',
         defense: 'dex',
       };
     }
-    return this.combatSkills[name];
+    return this.model.combatSkills[name];
   }
 
   getCombatSkill(name) {
-    if ((name in this.combatSkills)) {
-      return this.combatSkills[name];
+    if ((name in this.model.combatSkills)) {
+      return this.model.combatSkills[name];
     }
     return {
       lvl: 0,
@@ -188,8 +193,8 @@ class Player {
   }
 
   removeCombatSkill(name) {
-    if (name in this.combatSkills) {
-      delete this.combatSkills[name];
+    if (name in this.model.combatSkills) {
+      delete this.model.combatSkills[name];
     }
   }
 
