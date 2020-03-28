@@ -22,28 +22,26 @@ client.on('ready', () => {
     client.user.setActivity('Loading dices');
 });
 
-
 client.on('message', msg => {
     if (msg.author.bot) return;
     let parsed = parser.parse(msg, prefix);
     if (!parsed.success) return;
 
-    
-
-    if(parsed.command ==='luck'){
+    if (parsed.command === 'luck') {
         //reroll the last user command
-        const oldMsg=contextManager.getUserContext(msg.author.id).pop();
-        sendMsg(msg,`re roll last command`);
-        msg=oldMsg;
+        const oldMsg = contextManager.getUserContext(msg.author.id).pop();
+        sendMsg(msg, `re roll last command`);
+        msg = oldMsg;
         parsed = parser.parse(msg, prefix);
-    }else{
+    } else {
         contextManager.getUserContext(msg.author.id).push(msg);
     }
 
-    if (parsed.command === 'p'){
+    if (parsed.command === 'p') {
         playerManager.getPlayer(msg.author.id).handle(msg);
         return;
     }
+
     if (parsed.command === 'var') {
         variables.handle(msg);
         return;
@@ -137,8 +135,5 @@ const environmentCommandHandler = (msg) => {
     }
 
 }
-
-
-
 
 client.login(process.env.API_KEY);
