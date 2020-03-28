@@ -46,10 +46,20 @@ class Player {
                 !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
     }
     handleSave(msg){
-        msg.channel.send({ files: [{ attachment: `${JSON.stringify({
+        let embed = new Discord.RichEmbed()
+            .addField(`file`,JSON.stringify({
+                attr:this.attr,
+                combatSkills:this.combatSkills
+            }) , true)
+            .setTimestamp();
+
+        msg.channel.send(embed).then(msg => {msg.delete(25000)});
+
+        /*msg.channel.send({ files: [{ attachment: JSON.stringify({
             attr:this.attr,
             combatSkills:this.combatSkills
-        })}`, name: `${msg.member.displayName}.json` }] });
+        }), name: `${msg.member.displayName}.json` }] });
+        */
     }
     handle(msg){
         let args = msg.content.match(/!p\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
