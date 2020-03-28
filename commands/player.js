@@ -74,9 +74,9 @@ class Player {
 
   printCombatSkills() {
     let lines = '**COMBAT SKILLS**\n';
-    if (this.model) {
+    /*if (this.model) {
       Object.keys(this.model.combatSkills).forEach((skill) => lines = `${lines}\n ${skill}=${this.model.combatSkills[skill].lvl} attack=${this.model.combatSkills[skill].attack} defense=${this.model.combatSkills[skill].defense}`);
-    }
+    }*/
     return lines;
   }
 
