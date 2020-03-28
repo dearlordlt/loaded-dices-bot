@@ -1,5 +1,6 @@
 const { sendMsg } = require('../utils');
 const { Client, MessageAttachment } = require('discord.js');
+const fs = require('fs');
 
 class Player {
     constructor() {
@@ -48,10 +49,12 @@ class Player {
                 !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
     }
     handleSave(msg){
-        const buffer = JSON.stringify({
+        
+        fs.writeFileSync('./temp.tmp',JSON.stringify({
             attr:this.attr,
             combatSkills:this.combatSkills
-        });
+        }));
+        const buffer = fs.readFileSync('./temp.tmp');
         /**
          * Create the attachment using MessageAttachment,
          * overwritting the default file name to 'memes.txt'
