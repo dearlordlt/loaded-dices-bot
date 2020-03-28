@@ -1,16 +1,24 @@
 const { r, decorateRoll,sendMsg } = require('../utils');
 const { variables } = require('./variables');
+const { playerManager } = require('../playerManager');
 const combat={
     handle(msg, environment){
-        let args = msg.content.match(/!c\s*(\d*)*\s*([a-z]*)*\s*([+-])*\s*(\d*)*/i);
+        let args = msg.content.match(/!c\s*(\d*)*\s*((my.)?([a-z0-9]+))?\s*([+-])?\s*(\d*)?/i);
         let dices = parseInt(args[1] || "3");
-        const variable = args[2] || "<not exists>";
-        let sign = (args[3] === "-") ? -1 : 1;
-        let mod = parseInt(args[4] || "0");
+        let varPrefix=args[3];
+        const variable = args[4] || "<not exists>";
+        let sign = (args[5] === "-") ? -1 : 1;
+        let mod = parseInt(args[6] || "0");
         mod = sign * mod;
     
         if (dices > 0) {
-            const bonus = variables.getVariable(msg.author.id, variable);
+            let bonus = 0;
+            if(varPrefix){
+                bonus = playerManager.getPlayer(msg.author.id).getCombatSkillValue(variable,'attack');
+            }
+            else   
+                bonus = variables.getVariable(msg.author.id, variable);
+
             if (bonus !== 0) {
                 sendMsg(msg, `using ${variable}=${bonus}`);
                 mod = mod + bonus;

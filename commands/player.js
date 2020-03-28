@@ -29,14 +29,21 @@ class Player {
     }
     printCombatSkills(){
         let lines = '**COMBAT SKILLS**\n';
-        Object.keys(this.combatSkills).forEach(skill => lines = `${lines}\n ${skill}==${this.combatSkills[skill].lvl} attack=${this.combatSkills[skill].attack} defense=${this.combatSkills[skill].defense}`);
+        Object.keys(this.combatSkills).forEach(skill => lines = `${lines}\n ${skill}=${this.combatSkills[skill].lvl} attack=${this.combatSkills[skill].attack} defense=${this.combatSkills[skill].defense}`);
         return lines;
     }
     setAttr(name,value){
         this.attr[name]=value;
     }
-    help(msg){
-        sendMsg(msg,`${this.print()}`);
+    help(){
+        return `**PLAYER**
+                !p print //prints player info
+                !p sta 11 //sets attr sta to 11
+                !p sta //prints all attributes
+                !p c[ombat] bow //prints bow skill
+                !p c[ombat] bow 3 [a=ref] [d=dex]//sets bow skill to lvl 3 default attack attribute to ref and defense attribute to dex
+                !p c[ombat] bow 3 a=per //set bow skill to lvl 3 and attack attribute to per
+                !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
     }
     handle(msg){
         let args = msg.content.match(/!p\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
@@ -44,12 +51,16 @@ class Player {
             this.handleAttr(msg,args);
             return;
         }
-        args= msg.content.match(/!p\s+(combat)(\s+(\S+)\s*((\d+)\s*(a=(\S+))*\s*(d=(\S+))*)*)*/i);
+        args= msg.content.match(/!p\s+(combat|c)(\s+(add|remove)*\s*(\S+)\s*((\d+)\s*(a=(\S+))*\s*(d=(\S+))*)*)*/i);
         if (args){
             this.handleCombatSkills(msg,args);
             return;
         }
-        this.help(msg);
+        if (msg.content.match(/!p\s+print\s*/i))
+            sendMsg(msg, this.print());
+        else
+            sendMsg(msg, this.help());
+        
     }
 
     handleAttr(msg,args){
@@ -61,7 +72,15 @@ class Player {
         }
 
     }
-    getCombatSkill(name){
+    getCombatSkillValue(name, actionType){
+        const skill = this.getCombatSkill(name);
+        if (skill.lvl>0){
+            if (actionType in skill)
+                return this.attr[skill[actionType]]+skill.lvl;
+        }
+        return 0;
+    }
+    getOrCreateCombatSkill(name){
         if(! (name in this.combatSkills)){
             this.combatSkills[name]={
                 lvl:0,
@@ -71,20 +90,39 @@ class Player {
         }
         return this.combatSkills[name];
     }
+    getCombatSkill(name){
+        if((name in this.combatSkills)){
+            return this.combatSkills[name];
+        }
+        return {
+            lvl:0,
+            attack:"ref",
+            defense:"dex"
+        };
+    }
+    removeCombatSkill(name){
+        if(name in this.combatSkills){
+            delete this.combatSkills[name];
+        }
+    }
     handleCombatSkills(msg,args){
-        const name=args[3];
-        const lvl=args[5];
-        const a=args[7];
-        const d=args[9];
-
-        if (name && lvl){
+        const name=args[4];
+        const lvl=args[6];
+        const a=args[8];
+        const d=args[10];
+        const command=args[3] || 'add';
+        if (name && lvl && command==='add'){
              //nurodytas skill name ir lvl
-            const skill=this.getCombatSkill(name);
+            const skill=this.getOrCreateCombatSkill(name);
             skill.lvl=parseInt(lvl);
             if(a) skill.attack=a;
             if(d) skill.defense=d;
 
             sendMsg(msg,`combat skill ${name}=${skill.lvl} attack=${skill.attack} defense=${skill.defense}`);
+        }
+        else if(name && command==='rmove'){
+            this.removeCombatSkill(name);
+            sendMsg(msg,`combat skill ${name} removed`);
         }
         else if(name){
             const skill=this.getCombatSkill(name);
