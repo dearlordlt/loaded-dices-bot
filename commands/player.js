@@ -37,10 +37,10 @@ class Player {
     };
 
     /* if (fs.existsSync(this.fileName)) {
-          const info = JSON.parse(fs.readFileSync(this.fileName));
-          this.attr = info.attr;
-          this.combatSkills = info.combatSkills;
-        } */
+      const info = JSON.parse(fs.readFileSync(this.fileName));
+      this.attr = info.attr;
+      this.combatSkills = info.combatSkills;
+    } */
   }
 
   print() {
@@ -86,9 +86,9 @@ class Player {
 
   save() {
     /* fs.writeFileSync(this.fileName, JSON.stringify({
-          attr: this.attr,
-          combatSkills: this.combatSkills,
-        })); */
+      attr: this.attr,
+      combatSkills: this.combatSkills,
+    })); */
     playerModel.create({
       name: this.name,
       attr: {
@@ -108,11 +108,11 @@ class Player {
   handleDownloadFile(msg) {
     const buffer = fs.readFileSync(this.fileName);
     /**
-         * Create the attachment using MessageAttachment,
-         * overwritting the default file name to 'memes.txt'
-         * Read more about it over at
-         * http://discord.js.org/#/docs/main/master/class/MessageAttachment
-         */
+     * Create the attachment using MessageAttachment,
+     * overwritting the default file name to 'memes.txt'
+     * Read more about it over at
+     * http://discord.js.org/#/docs/main/master/class/MessageAttachment
+     */
     const attachment = new MessageAttachment(buffer, `${this.name}.json`);
     msg.channel.send(`${msg.author}, your char file!`, attachment)
       .then((m) => {
@@ -122,8 +122,8 @@ class Player {
 
   handle(msg) {
     if ((this.handleAttr(msg)
-                || this.handleCombatSkills(msg)
-                || this.handleSubcommands(msg)
+      || this.handleCombatSkills(msg)
+      || this.handleSubcommands(msg)
     ) === false) {
       sendMsg(msg, this.help());
     }
@@ -246,7 +246,6 @@ class PlayerManager {
     return this.localPlayers[id];
   }
 }
-
 
 module.exports = {
   Player,
