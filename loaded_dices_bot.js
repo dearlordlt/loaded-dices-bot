@@ -144,6 +144,10 @@ const environmentCommandHandler = (msg) => {
 
 client.login(process.env.API_KEY);
 
-app.get('/', (req, res) => res.send('Kill all humans! all bots unite!!'))
+app.get('/', (req, res) => res.send('Kill all humans! all bots unite!!'));
 
-app.listen(port, () => console.log(`Loaded dice bot is listening on port ${port}!`))
+app.get('*', function (req, res) {
+    res.status(404).send('ERROR 404');
+});
+
+app.listen(port, () => console.log(`Loaded dice bot is listening on port ${port}!`));
