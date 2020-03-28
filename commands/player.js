@@ -1,4 +1,6 @@
 const { sendMsg } = require('../utils');
+const { Client, MessageAttachment } = require('discord.js');
+
 class Player {
     constructor() {
         this.attr = {
@@ -46,20 +48,19 @@ class Player {
                 !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
     }
     handleSave(msg){
-        let embed = new Discord.RichEmbed()
-            .addField(`file`,JSON.stringify({
-                attr:this.attr,
-                combatSkills:this.combatSkills
-            }) , true)
-            .setTimestamp();
-
-        msg.channel.send(embed).then(msg => {msg.delete(25000)});
-
-        /*msg.channel.send({ files: [{ attachment: JSON.stringify({
+        const buffer = JSON.stringify({
             attr:this.attr,
             combatSkills:this.combatSkills
-        }), name: `${msg.member.displayName}.json` }] });
-        */
+        });
+        /**
+         * Create the attachment using MessageAttachment,
+         * overwritting the default file name to 'memes.txt'
+         * Read more about it over at
+         * http://discord.js.org/#/docs/main/master/class/MessageAttachment
+         */
+        const attachment = new MessageAttachment(buffer, `${msg.member.displayName}.json`);
+        msg.channel.send(`${message.author}, your save file!`, attachment);
+        
     }
     handle(msg){
         let args = msg.content.match(/!p\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
@@ -73,10 +74,10 @@ class Player {
             return;
         }
         args=msg.content.match(/!p\s+(print|save)\s*/i);
-        if(args)
+        if(args && args[1])
             if (args[1]==='print')
                 sendMsg(msg, this.print());
-            if (args[1] === 'save')
+            else if (args[1] === 'save')
                 this.handleSave(msg);
         else
             sendMsg(msg, this.help());
