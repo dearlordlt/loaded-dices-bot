@@ -16,6 +16,8 @@ const PlayerModel = mongoose.model('Player', {
     will: Number,
   },
   combatSkills: {
+    swords: Number,
+    evade: Number,
   },
 });
 
@@ -74,9 +76,9 @@ class Player {
 
   printCombatSkills() {
     let lines = '**COMBAT SKILLS**\n';
-    /*if (this.model) {
+    if (this.model) {
       Object.keys(this.model.combatSkills).forEach((skill) => lines = `${lines}\n ${skill}=${this.model.combatSkills[skill].lvl} attack=${this.model.combatSkills[skill].attack} defense=${this.model.combatSkills[skill].defense}`);
-    }*/
+    }
     return lines;
   }
 
@@ -99,7 +101,7 @@ class Player {
   }
 
   save() {
-    PlayerModel.update({ playerId: this.playerId, name: this.name }, this.model, () => {
+    PlayerModel.updateOne({ playerId: this.playerId, name: this.name }, this.model, () => {
 
     });
   }
