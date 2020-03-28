@@ -3,7 +3,10 @@ const { Client, MessageAttachment } = require('discord.js');
 const fs = require('fs');
 
 class Player {
-    constructor() {
+    constructor(name) {
+        this.name=name;
+        this.fileName=`./localDb/chars/${this.name}.json`;
+
         this.attr = {
             str:10,
             sta:10,
@@ -15,6 +18,13 @@ class Player {
         this.combatSkills={
             
         };
+        
+        if (fs.existsSync(fileName)){
+            const info=JSON.parse( fs.readFileSync(fileName));
+            this.attr = info.attr;
+            this.combatSkills = info.combatSkills;
+        }
+        
     }
     
     print (){
@@ -41,6 +51,7 @@ class Player {
     help(){
         return `**PLAYER**
                 !p print //prints player info
+                !p download //downloads player info as json file
                 !p sta 11 //sets attr sta to 11
                 !p sta //prints all attributes
                 !p c[ombat] bow //prints bow skill
@@ -48,23 +59,26 @@ class Player {
                 !p c[ombat] bow 3 a=per //set bow skill to lvl 3 and attack attribute to per
                 !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
     }
-    handleSave(msg){
-        
-        fs.writeFileSync('./temp.tmp',JSON.stringify({
+    save(){
+        fs.writeFileSync(this.fileName,JSON.stringify({
             attr:this.attr,
             combatSkills:this.combatSkills
         }));
-        const buffer = fs.readFileSync('./temp.tmp');
+    }
+    handleDownloadFile(msg){
+        
+       
+        const buffer = fs.readFileSync(this.fileName);
         /**
          * Create the attachment using MessageAttachment,
          * overwritting the default file name to 'memes.txt'
          * Read more about it over at
          * http://discord.js.org/#/docs/main/master/class/MessageAttachment
          */
-        const attachment = new MessageAttachment(buffer, `${msg.member.displayName}.json`);
-        msg.channel.send(`${msg.author}, your save file!`, attachment)
+        const attachment = new MessageAttachment(buffer, `${this.name}.json`);
+        msg.channel.send(`${msg.author}, your char file!`, attachment)
                     .then(m => {
-                        m.delete(1000*60)
+                        m.delete(10000);
                     });
         
     }
@@ -93,6 +107,7 @@ class Player {
     handleAttr(msg,args){
         if (args[1] && args[2]){
             this.setAttr(args[1],parseInt(args[2]));
+            this.save();
             sendMsg(msg,`${args[1]}=${args[2]}`);
         } else{
             sendMsg(msg,this.printAttr());
@@ -152,11 +167,12 @@ class Player {
             skill.lvl=parseInt(lvl);
             if(a) skill.attack=a;
             if(d) skill.defense=d;
-
+            this.save();
             sendMsg(msg,`combat skill ${name}=${skill.lvl} attack=${skill.attack} defense=${skill.defense}`);
         }
         else if(name && command==='rmove'){
             this.removeCombatSkill(name);
+            this.save();
             sendMsg(msg,`combat skill ${name} removed`);
         }
         else if(name){
