@@ -1,6 +1,6 @@
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
-const { r, explode, decorateRoll,sendMsg } = require('./utils');
+const { sendMsg } = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
 const { location, printLocationHelp } = require('./commands/location');
@@ -12,7 +12,6 @@ const { combat } = require('./commands/combat');
 const { playerManager } = require('./playerManager');
 
 const { crit, printCritHelp } = require('./commands/crit');
-player = require('')
 require('dotenv').config();
 
 const client = new discord.Client();

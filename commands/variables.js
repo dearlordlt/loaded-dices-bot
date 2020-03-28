@@ -1,6 +1,9 @@
 const { sendMsg } = require('../utils');
 class Variables {
-    localVariablesMap = {};
+    cosntructor(){
+        this.localVariablesMap = {};
+    }
+    
     help() {
         return `**VAR:**
             !var bow 18 //sets bow to 18 for user
@@ -8,13 +11,13 @@ class Variables {
             !var list //list all variables for user
             !var clear //clear all variable for user
             !var bow //removes only bow variable`;
-    };
+    }
     getVariable(author, varName) {
         if (author in this.localVariablesMap)
             if (varName in this.localVariablesMap[author])
                 return this.localVariablesMap[author][varName];
         return 0;
-    };
+    }
     handle(msg) {
         const author = msg.author.id;
 
@@ -39,7 +42,7 @@ class Variables {
         args = msg.content.match(/!var\s*([a-z]+[0-9]*)(\[(\d+)\])*\s*(\d*)\s*([+-]{2}(\d*))*/i);
         if (args) {
             if (args[4]) {
-                let idx=1;
+                
                 let cnt=0;
                 if (args[3])
                     cnt=parseInt(args[3]);

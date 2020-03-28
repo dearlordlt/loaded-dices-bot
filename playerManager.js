@@ -1,6 +1,9 @@
 const { Player } = require('./commands/player');
 class PlayerManager{
-    localPlayers = {}
+    construcotr(){
+        this.localPlayers = {};
+    }
+    
     getPlayer(id){
         if (!(id in this.localPlayers))
             this.localPlayers[id] = new Player();

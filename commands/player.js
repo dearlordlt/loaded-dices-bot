@@ -1,13 +1,16 @@
 const { sendMsg } = require('../utils');
 class Player {
-    attr = {
-        str:10,
-        sta:10,
-        dex:10,
-        ref:10,
-        per:10,
-        will:10
-    };
+    constructor() {
+        this.attr = {
+            str:10,
+            sta:10,
+            dex:10,
+            ref:10,
+            per:10,
+            will:10
+        }
+    }
+    
     print (){
         return `${this.printAttr()}`;
     }
@@ -26,7 +29,7 @@ class Player {
     handle(msg){
         let args = msg.content.match(/!player\s*(str|sta|dex|ref|per|will)*\s*(\d*)/i);
         if (args){
-            handleAttr(msg,args);
+            this.handleAttr(msg,args);
             return;
         }
     }
