@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line max-classes-per-file
 // const { MessageAttachment } = require('discord.js');
+const AsciiTable = require('ascii-table');
 const { sendMsg, disc } = require('../utils');
 // const { MessageAttachment } = require('discord.js');
 const { PlayerModel } = require('../models/player');
@@ -73,15 +75,11 @@ class Player {
   }
 
   printAttr() {
-    return `
-        **ATTRIBUTES**
-        \`\`\`asciidoc
-+------------------------+------------------------+------------------------+------------------------+------------------------+-------------------------+
-|          str           |          sta           |          dex           |          ref           |          per           |          will           |
-+------------------------+------------------------+------------------------+------------------------+------------------------+-------------------------+
-| ${this.model.attr.str} | ${this.model.attr.sta} | ${this.model.attr.dex} | ${this.model.attr.ref} | ${this.model.attr.per} | ${this.model.attr.will} |
-+------------------------+------------------------+------------------------+------------------------+------------------------+-------------------------+
-        \`\`\``;
+    const table = new AsciiTable('**ATTRIBUTES**');
+    table
+      .setHeading('str', 'sta', 'dex', 'ref', 'per', 'will')
+      .addRow(this.model.attr.str, this.model.attr.sta, this.model.attr.dex, this.model.attr.ref, this.model.attr.per, this.model.attr.will);
+    return table.toString();
   }
 
 
