@@ -32,7 +32,10 @@ client.on('message', msg => {
 
     if(parsed.command ==='luck'){
         //reroll the last user command
-        msg=contextManager.getUserContext(msg.author.id).pop();
+        const oldMsg=contextManager.getUserContext(msg.author.id).pop();
+        sendMsg(msg,`re roll last command`, msg);
+        msg=oldMsg;
+
     }else{
         contextManager.getUserContext(msg.author.id).push(msg);
     }
