@@ -29,25 +29,29 @@ class Player {
     }
     printCombatSkills(){
         let lines = '**COMBAT SKILLS**\n';
-        Object.keys(this.combatSkills).forEach(e => lines = `${lines}\n ${e}=${this.combatSkills[e]}`);
+        Object.keys(this.combatSkills).forEach(skill => lines = `${lines}\n ${skill}==${this.combatSkills[skill].lvl} attack=${this.combatSkills[skill].attack} defense=${this.combatSkills[skill].defense}`);
         return lines;
     }
     setAttr(name,value){
         this.attr[name]=value;
     }
+    help(msg){
+        sendMsg(msg,`${this.print()}`);
+    }
     handle(msg){
-        let args = msg.content.match(/!player\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
+        let args = msg.content.match(/!p\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
         if (args){
             this.handleAttr(msg,args);
             return;
         }
-        args= msg.content.match(/!player\s+(combat)(\s+(\S+)\s*((\d+)\s*(a=(\S+))*\s*(d=(\S+))*)*)*/i);
+        args= msg.content.match(/!p\s+(combat)(\s+(\S+)\s*((\d+)\s*(a=(\S+))*\s*(d=(\S+))*)*)*/i);
         if (args){
             this.handleCombatSkills(msg,args);
             return;
         }
-
+        this.help(msg);
     }
+
     handleAttr(msg,args){
         if (args[1] && args[2]){
             this.setAttr(args[1],parseInt(args[2]));

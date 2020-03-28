@@ -29,7 +29,7 @@ client.on('message', msg => {
     if (msg.author.bot) return;
     if (!parsed.success) return;
 
-    if (parsed.command === 'player'){
+    if (parsed.command === 'p'){
         playerManager.getPlayer(msg.author.id).handle(msg);
         return;
     }
