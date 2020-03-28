@@ -26,11 +26,12 @@ const characters = require('./routes/characters');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const db = mongoose.connect(process.env.MONGODB_URL, {
+mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
   console.info('Mongo Connected');
