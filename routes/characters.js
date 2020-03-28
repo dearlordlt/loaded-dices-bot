@@ -12,7 +12,7 @@ const tpl = `
 
   <div><h1>Combat Skills</h1></div>
   <ul class="skills">
-    <% for (var i = 0; i < character.attr.combatSkills[i]..length; i++) { %>
+    <% for (var i = 0; i < character.attr.combatSkills[i].length; i++) { %>
       <li class="skill">
           <div>STR: <%= character.attr.combatSkills[i].name %></div>
           <div>STR: <%= character.attr.combatSkills[i].lvl %></div>
