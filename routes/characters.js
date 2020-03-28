@@ -1,9 +1,19 @@
 const express = require('express');
+const fs = require('fs');
 
 const router = express.Router();
 
 router.get('/:name', (req, res) => {
-  res.send(`character ${req.params.name} home page`);
+  const path = `./localDb/chars/${req.params.name}.json`;
+  try {
+    console.log(fs.existsSync(path), path);
+    if (fs.existsSync(path)) {
+      const data = fs.readFileSync(path);
+      res.status(200).json(JSON.parse(data));
+    }
+  } catch (err) {
+    res.status(200).json(err);
+  }
 });
 
 module.exports = router;
