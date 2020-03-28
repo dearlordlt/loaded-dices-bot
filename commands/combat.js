@@ -17,7 +17,7 @@ const combat={
                 const player= playerManager.getPlayer(msg.author.id);
                 bonus =player.getCombatSkillValue(variable,'attack');
                 if (bonus !== 0) {
-                    sendMsg(msg, `using my ${variable}=${player.getCombatSkillDescription()}`);
+                    sendMsg(msg, `using my ${variable}=${player.getCombatSkillDescription(variable,'attack')}`);
                     mod = mod + bonus;
                 }
             }

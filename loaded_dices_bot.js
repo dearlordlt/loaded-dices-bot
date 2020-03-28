@@ -10,7 +10,7 @@ const { damage, printDamageHelp } = require('./commands/damage');
 const { variables } = require('./commands/variables');
 const { combat } = require('./commands/combat');
 const { playerManager } = require('./playerManager');
-
+const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
 require('dotenv').config();
 
@@ -24,10 +24,16 @@ client.on('ready', () => {
 
 
 client.on('message', msg => {
-    const parsed = parser.parse(msg, prefix);
-
     if (msg.author.bot) return;
+    const parsed = parser.parse(msg, prefix);
     if (!parsed.success) return;
+
+    contextManager.getUserContext(msg.author.id).push(msg);
+
+    if(parsed.command ==='luck'){
+        //reroll the last user command
+        msg=contextManager.getUserContext(msg.author.id).pop();
+    }
 
     if (parsed.command === 'p'){
         playerManager.getPlayer(msg.author.id).handle(msg);
