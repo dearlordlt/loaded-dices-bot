@@ -1,6 +1,6 @@
 const { Player } = require('./commands/player');
 class PlayerManager{
-    construcotr(){
+    constructor(){
         this.localPlayers = {};
     }
     

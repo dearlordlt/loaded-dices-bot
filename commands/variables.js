@@ -1,6 +1,6 @@
 const { sendMsg } = require('../utils');
 class Variables {
-    cosntructor(){
+    constructor(){
         this.localVariablesMap = {};
     }
     
