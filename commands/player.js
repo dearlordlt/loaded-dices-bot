@@ -1,26 +1,9 @@
 // eslint-disable-next-line max-classes-per-file
-const mongoose = require('mongoose');
-const { MessageAttachment } = require('discord.js');
 const fs = require('fs');
-const { sendMsg } = require('../utils');
 
-const combatSkillSchema = new mongoose.Schema({
-  name: String, lvl: Number, attack: String, defense: String,
-});
-const playerSchema = new mongoose.Schema({
-  playerId: Number,
-  name: String,
-  attr: {
-    str: Number,
-    sta: Number,
-    dex: Number,
-    ref: Number,
-    per: Number,
-    will: Number,
-  },
-  combatSkills: [combatSkillSchema],
-});
-const PlayerModel = mongoose.model('Player', playerSchema);
+const { MessageAttachment } = require('discord.js');
+const { sendMsg } = require('../utils');
+const { PlayerModel } = require('../models/player');
 
 class Player {
   constructor(playerId, name) {
