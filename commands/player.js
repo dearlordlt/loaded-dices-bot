@@ -5,7 +5,7 @@ const fs = require('fs');
 const { sendMsg } = require('../utils');
 
 const combatSkillSchema = new mongoose.Schema({
-  name: String, lvl: Number, atack: String, defense: String,
+  name: String, lvl: Number, attack: String, defense: String,
 });
 const playerSchema = new mongoose.Schema({
   playerId: Number,
@@ -36,12 +36,12 @@ class Player {
           playerId: this.playerId,
           name: this.name,
           attr: {
-            str: 0,
-            sta: 0,
-            dex: 0,
-            ref: 0,
-            per: 0,
-            will: 0,
+            str: 10,
+            sta: 10,
+            dex: 10,
+            ref: 10,
+            per: 10,
+            will: 10,
           },
           combatSkills: [],
         };
@@ -79,7 +79,7 @@ class Player {
   printCombatSkills() {
     let lines = '**COMBAT SKILLS**\n';
     if (this.model && this.model.combatSkills) {
-      this.model.combatSkills.forEach((skill) => lines = `${lines}\n ${skill.name}=${skill.lvl} attack=${skill.atack} defense=${skill.defense}`);
+      this.model.combatSkills.forEach((skill) => lines = `${lines}\n ${skill.name}=${skill.lvl} attack=${skill.attack} defense=${skill.defense}`);
     }
     return lines;
   }
