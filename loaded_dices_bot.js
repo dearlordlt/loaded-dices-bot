@@ -6,6 +6,7 @@ const parser = require('discord-command-parser');
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const { sendMsg, printEnvHelp, printOtherHelp } = require('./utils');
 const { Environment } = require('./ajax-env.js');
@@ -24,6 +25,12 @@ const characters = require('./routes/characters');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+const Cat = mongoose.model('Cat', { name: String });
+
+const kitty = new Cat({ name: 'Zildjian' });
+kitty.save().then(() => console.log('meow'));
 
 const client = new discord.Client();
 const prefix = '!';
