@@ -27,8 +27,9 @@ class Player {
   }
 
   print() {
-    return `${this.printAttr()}
-                ${this.printCombatSkills()}`;
+    return `
+      ${this.printAttr().trim()}
+      ${this.printCombatSkills().trim()}`;
   }
 
   printAttr() {
