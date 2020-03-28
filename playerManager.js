@@ -4,9 +4,9 @@ class PlayerManager{
         this.localPlayers = {};
     }
     
-    getPlayer(id){
+    getPlayer(id,name){
         if (!(id in this.localPlayers))
-            this.localPlayers[id] = new Player();
+            this.localPlayers[id] = new Player(name);
 
         return this.localPlayers[id];
     }

@@ -1,2 +1,5 @@
 .env
 /node_modules/
+/localDb/chars/*
+!/localDb/chars/readme.txt
+

@@ -46,7 +46,7 @@ client.on('message', msg => {
     }
 
     if (parsed.command === 'p') {
-        playerManager.getPlayer(msg.author.id).handle(msg);
+        playerManager.getPlayer(msg.author.id, msg.member.displayName).handle(msg);
         return;
     }
 
