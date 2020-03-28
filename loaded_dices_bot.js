@@ -5,6 +5,7 @@ const discord = require('discord.js');
 const parser = require('discord-command-parser');
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const { sendMsg, printEnvHelp, printOtherHelp } = require('./utils');
 const { Environment } = require('./ajax-env.js');
@@ -139,6 +140,7 @@ const environmentCommandHandler = (msg) => {
 
 client.login(process.env.API_KEY);
 
+app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }));
 

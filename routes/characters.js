@@ -6,7 +6,6 @@ const router = express.Router();
 router.get('/:name', (req, res) => {
   const path = `./localDb/chars/${req.params.name}.json`;
   try {
-    console.log(fs.existsSync(path), path);
     if (fs.existsSync(path)) {
       const data = fs.readFileSync(path);
       res.status(200).json(JSON.parse(data));
