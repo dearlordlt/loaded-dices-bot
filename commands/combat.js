@@ -14,15 +14,22 @@ const combat={
         if (dices > 0) {
             let bonus = 0;
             if(varPrefix){
-                bonus = playerManager.getPlayer(msg.author.id).getCombatSkillValue(variable,'attack');
+                const player= playerManager.getPlayer(msg.author.id);
+                bonus =player.getCombatSkillValue(variable,'attack');
+                if (bonus !== 0) {
+                    sendMsg(msg, `using my ${variable}=${player.getCombatSkillDescription()}`);
+                    mod = mod + bonus;
+                }
             }
-            else   
+            else{
                 bonus = variables.getVariable(msg.author.id, variable);
-
-            if (bonus !== 0) {
-                sendMsg(msg, `using ${variable}=${bonus}`);
-                mod = mod + bonus;
+                if (bonus !== 0) {
+                    sendMsg(msg, `using ${variable}=${bonus}`);
+                    mod = mod + bonus;
+                }
             }
+
+            
             let roll = [...Array(dices)].map(el => el = r());
             let initialRollSum = roll.reduce((a, b) => a + b, 0);
             let line = `roll: [${decorateRoll(roll, dices)}] = ${initialRollSum}`;

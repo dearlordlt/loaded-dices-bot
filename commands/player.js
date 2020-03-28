@@ -80,6 +80,14 @@ class Player {
         }
         return 0;
     }
+    getCombatSkillDescription(name, actionType){
+        const skill = this.getCombatSkill(name);
+        if (skill.lvl > 0){
+            if (actionType in skill)
+                return `${skill[actionType]}:${this.attr[skill[actionType]]} + ${skill.lvl}=${this.attr[skill[actionType]]+skill.lvl}`;
+        }
+        return ``;
+    }
     getOrCreateCombatSkill(name){
         if(! (name in this.combatSkills)){
             this.combatSkills[name]={
