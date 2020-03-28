@@ -79,7 +79,7 @@ class Player {
     table
       .setHeading('str', 'sta', 'dex', 'ref', 'per', 'will')
       .addRow(this.model.attr.str, this.model.attr.sta, this.model.attr.dex, this.model.attr.ref, this.model.attr.per, this.model.attr.will);
-    return table.toString();
+    return `\`\`\`asciidoc\n${table.toString()}\n\`\`\``;
   }
 
 
