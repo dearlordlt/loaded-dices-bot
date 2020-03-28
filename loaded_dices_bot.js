@@ -20,6 +20,7 @@ const { combat } = require('./commands/combat');
 const { playerManager } = require('./playerManager');
 const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
+const { environmentCommandHandler } = require('./commands/env');
 
 const characters = require('./routes/characters');
 
@@ -39,7 +40,7 @@ db.once('open', () => {
 
 const client = new discord.Client();
 const prefix = '!';
-let environment = new Environment();
+const environment = new Environment();
 
 client.on('ready', () => {
   console.log(`Connected as ${client.user.tag}`);
@@ -78,7 +79,6 @@ client.on('message', (msg) => {
   }
 
   if (parsed.command === 'env') {
-    // eslint-disable-next-line no-use-before-define
     environmentCommandHandler(msg);
     return;
   }
@@ -134,21 +134,6 @@ client.on('message', (msg) => {
         `);
   }
 });
-
-const environmentCommandHandler = (msg) => {
-  const args = msg.content.match(/!env\s*((autofail\s(\d+))*(clear)*(list)*)\s*/i);
-  if (args) {
-    if (args[1] === 'clear') {
-      environment = new Environment();
-      msg.reply('environment restored to default values');
-    } else if (args[1] === '') {
-      msg.reply(`**environment**\nautofail=${environment.autofail}`);
-    } else {
-      environment.autofail = parseInt(args[3], 10);
-      msg.reply(`autofail=${environment.autofail}`);
-    }
-  }
-};
 
 client.login(process.env.API_KEY);
 
