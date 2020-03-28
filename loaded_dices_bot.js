@@ -25,7 +25,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
     if (msg.author.bot) return;
-    const parsed = parser.parse(msg, prefix);
+    let parsed = parser.parse(msg, prefix);
     if (!parsed.success) return;
 
     
@@ -33,9 +33,9 @@ client.on('message', msg => {
     if(parsed.command ==='luck'){
         //reroll the last user command
         const oldMsg=contextManager.getUserContext(msg.author.id).pop();
-        sendMsg(msg,`re roll last command`, oldMsg);
+        sendMsg(msg,`re roll last command`);
         msg=oldMsg;
-
+        parsed = parser.parse(msg, prefix);
     }else{
         contextManager.getUserContext(msg.author.id).push(msg);
     }
