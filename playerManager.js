@@ -1,4 +1,4 @@
-const { Player } = require('./commands/Player');
+const { Player } = require('./commands/player');
 class PlayerManager{
     localPlayers = {}
     getPlayer(id){
