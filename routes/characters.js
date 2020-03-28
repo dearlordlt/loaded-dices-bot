@@ -11,17 +11,18 @@ const tpl = `
   <div>STR: <%= character.attr.will %></div>
 
   <div><h1>Combat Skills</h1></div>
-  <ul class="skills">
-    <% for (var i = 0; i < character.attr.combatSkills[i].length; i++) { %>
-      <li class="skill">
-          <div>STR: <%= character.attr.combatSkills[i].name %></div>
-          <div>STR: <%= character.attr.combatSkills[i].lvl %></div>
-          <div>STR: <%= character.attr.combatSkills[i].defense %></div>
-          <div>STR: <%= character.attr.combatSkills[i].attack %></div>
-      </li>
-    <% } %>
-</ul>
-
+  <% if (character.combatSkills.length > 0){%>
+    <ul class="skills">
+      <% for (var i = 0; i < character.combatSkills.length; i++) { %>
+        <li class="skill">
+            <div>STR: <%= character.combatSkills[i].name %></div>
+            <div>STR: <%= character.combatSkills[i].lvl %></div>
+            <div>STR: <%= character.combatSkills[i].defense %></div>
+            <div>STR: <%= character.combatSkills[i].attack %></div>
+        </li>
+      <% } %>
+    </ul>
+  <%}%>
 `;
 
 const { PlayerModel } = require('../models/player');
