@@ -32,7 +32,8 @@ class Player {
   }
 
   printAttr() {
-    return `**ATTRIBUTES**
+    return `
+        **ATTRIBUTES**
             str:${this.attr.str}
             sta:${this.attr.sta}
             dex:${this.attr.dex}
@@ -53,15 +54,16 @@ class Player {
 
   // eslint-disable-next-line class-methods-use-this
   help() {
-    return `**PLAYER**
-              !p print //prints player info
-              !p download //downloads player info as json file
-              !p sta 11 //sets attr sta to 11
-              !p sta //prints all attributes
-              !p c[ombat] bow //prints bow skill
-              !p c[ombat] bow 3 [a=ref] [d=dex]//sets bow skill to lvl 3 default attack attribute to ref and defense attribute to dex
-              !p c[ombat] bow 3 a=per //set bow skill to lvl 3 and attack attribute to per
-              !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
+    return `
+        **PLAYER**
+            !p print //prints player info
+            !p download //downloads player info as json file
+            !p sta 11 //sets attr sta to 11
+            !p sta //prints all attributes
+            !p c[ombat] bow //prints bow skill
+            !p c[ombat] bow 3 [a=ref] [d=dex]//sets bow skill to lvl 3 default attack attribute to ref and defense attribute to dex
+            !p c[ombat] bow 3 a=per //set bow skill to lvl 3 and attack attribute to per
+            !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
   }
 
   save() {
