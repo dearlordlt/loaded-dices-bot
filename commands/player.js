@@ -62,7 +62,10 @@ class Player {
          * http://discord.js.org/#/docs/main/master/class/MessageAttachment
          */
         const attachment = new MessageAttachment(buffer, `${msg.member.displayName}.json`);
-        msg.channel.send(`${msg.author}, your save file!`, attachment);
+        msg.channel.send(`${msg.author}, your save file!`, attachment)
+                    .then(m => {
+                        m.delete(1000*60)
+                    });
         
     }
     handle(msg){
