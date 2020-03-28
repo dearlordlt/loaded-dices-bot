@@ -5,7 +5,7 @@ const discord = require('discord.js');
 const parser = require('discord-command-parser');
 const express = require('express');
 
-const { sendMsg } = require('./utils');
+const { sendMsg, printEnvHelp, printOtherHelp } = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
 const { location, printLocationHelp } = require('./commands/location');
@@ -98,19 +98,15 @@ client.on('message', (msg) => {
 
   if (parsed.command === 'h') {
     msg.reply(`
-          ${combat.help()}
-          ${printSocialHelp()}
-          ${printDamageHelp()}
-          ${variables.help()}
-          ${printSpellHelp()}
-          ${printLocationHelp()}
-          **ENVIRONMENT**
-            !env //prints current environment
-            !env clear //restores default
-            !env autofail 9 //sets autofail to 9
-          ${printCritHelp()}
-          **OTHER:**
-            !rules //links to resources
+          ${combat.help().trim()}
+          ${printSocialHelp().trim()}
+          ${printDamageHelp().trim()}
+          ${variables.help().trim()}
+          ${printSpellHelp().trim()}
+          ${printLocationHelp().trim()}
+          ${printEnvHelp().trim()}
+          ${printCritHelp().trim()}
+          ${printOtherHelp().trim()}
         `);
   }
 

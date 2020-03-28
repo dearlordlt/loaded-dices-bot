@@ -34,7 +34,7 @@ const spell = (args, command, sendMsg, msg) => {
 
 const printSpellHelp = () => `
     **SPELL:**
-      !spell //rolls 3d spell roll`;
+            !spell //rolls 3d spell roll`;
 
 module.exports = {
   spell,

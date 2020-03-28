@@ -35,7 +35,7 @@ const crit = (args, command, sendMsg, msg) => {
 
 const printCritHelp = () => `
     **CRIT**
-        !crit melee|ranged|spell 3|4|17|18`;
+            !crit melee|ranged|spell 3|4|17|18`;
 
 module.exports = {
   crit,
