@@ -45,6 +45,12 @@ class Player {
                 !p c[ombat] bow 3 a=per //set bow skill to lvl 3 and attack attribute to per
                 !p c[ombat] boxing 2 d=sta//set boxing skill to lvl 2 and defense attribute to sta`;
     }
+    handleSave(msg){
+        msg.channel.send({ files: [{ attachment: `${JSON.stringify({
+            attr:this.attr,
+            combatSkills:this.combatSkills
+        })}`, name: `${msg.member.displayName}.json` }] });
+    }
     handle(msg){
         let args = msg.content.match(/!p\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
         if (args){
@@ -56,8 +62,12 @@ class Player {
             this.handleCombatSkills(msg,args);
             return;
         }
-        if (msg.content.match(/!p\s+print\s*/i))
-            sendMsg(msg, this.print());
+        args=msg.content.match(/!p\s+(print|save)\s*/i);
+        if(args)
+            if (args[1]==='print')
+                sendMsg(msg, this.print());
+            if (args[1] === 'save')
+                this.handleSave(msg);
         else
             sendMsg(msg, this.help());
         
