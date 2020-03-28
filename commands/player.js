@@ -75,7 +75,10 @@ class Player {
   printAttr() {
     return `
         **ATTRIBUTES**
-        |str|${this.model.attr.str}|sta|${this.model.attr.sta}|dex|${this.model.attr.dex}|ref|${this.model.attr.ref}|per|${this.model.attr.per}|will|${this.model.attr.will}|`;
+        |str|sta|dex|ref|per|will|
+        |--:|--:|--:|--:|--:|---:|
+        |${this.model.attr.str}|${this.model.attr.sta}|${this.model.attr.dex}|${this.model.attr.ref}|${this.model.attr.per}|${this.model.attr.will}|
+        `;
   }
 
 
