@@ -17,10 +17,8 @@ const { playerManager } = require('./playerManager');
 const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
 
-const fs = require('fs')
-const https = require('https')
 const app = express()
-const port = process.env.PORT || 80
+const port = process.env.PORT || 3000
 
 const client = new discord.Client();
 const prefix = '!';
@@ -148,7 +146,4 @@ client.login(process.env.API_KEY);
 
 app.get('/', (req, res) => res.send('Kill all humans! all bots unite!!'))
 
-https.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-}, app).listen(port, () => console.log(`Loaded dice bot is listening on port ${port}!`))
+app.listen(port, () => console.log(`Loaded dice bot is listening on port ${port}!`))
