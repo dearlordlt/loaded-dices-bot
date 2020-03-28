@@ -8,7 +8,9 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
-const { sendMsg, printEnvHelp, printOtherHelp } = require('./utils');
+const {
+  sendMsg, printEnvHelp, printOtherHelp, disc,
+} = require('./utils');
 const { Environment } = require('./ajax-env.js');
 const { sublocation } = require('./commands/sublocation');
 const { location, printLocationHelp } = require('./commands/location');
@@ -39,6 +41,7 @@ db.once('open', () => {
 });
 
 const client = new discord.Client();
+disc.client = client;
 const prefix = '!';
 const environment = new Environment();
 

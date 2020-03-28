@@ -1,8 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 const mongoose = require('mongoose');
-const { MessageAttachment } = require('discord.js');
-const fs = require('fs');
-const { sendMsg } = require('../utils');
+// const { MessageAttachment } = require('discord.js');
+const { sendMsg, disc } = require('../utils');
 
 const combatSkillSchema = new mongoose.Schema({
   name: String, lvl: Number, attack: String, defense: String,
@@ -27,54 +26,74 @@ class Player {
     this.name = name;
     this.playerId = playerId;
     this.model = null;
+  }
 
-    PlayerModel.findOne({ playerId, name }, (err, player) => {
-      if (player == null) {
+  checkMongooseError(err, msg = 'failed to communicate with DB') {
+    if (err) {
+      disc.client.send(`${this.name}, ${msg}!\n ${err}`);
+      return false;
+    }
+    return true;
+  }
+
+  handleCreateChar(msg, name) {
+    this.model = {
+      playerId: this.playerId,
+      name: this.name,
+      attr: {
+        str: 10,
+        sta: 10,
+        dex: 10,
+        ref: 10,
+        per: 10,
+        will: 10,
+      },
+      combatSkills: [],
+    };
+    PlayerModel.findOneAndDelete({ playerId: this.playerId, name }, (err) => {
+      this.checkMongooseError(err);
+      PlayerModel.create(this.model, (saveErr) => {
+        this.checkMongooseError(saveErr, 'failed to save char');
+        msg.reply(`character created name=${this.name}`);
+      });
+    });
+  }
+
+  handleLoadChar(msg, name) {
+    PlayerModel.findOne({ playerId: this.playerId, name }, (err, player) => {
+      if (this.checkMongooseError(err)) {
+        if (player == null) {
+          msg.reply(`character with name ${name} not found forcurrent player`);
+        } else {
         // eslint-disable-next-line no-console
-        console.log('player not found, creating new one');
-        this.model = {
-          playerId: this.playerId,
-          name: this.name,
-          attr: {
-            str: 10,
-            sta: 10,
-            dex: 10,
-            ref: 10,
-            per: 10,
-            will: 10,
-          },
-          combatSkills: [],
-        };
-        PlayerModel.create(this.model, () => {
-          // saved!
-        });
-      } else {
-        // eslint-disable-next-line no-console
-        console.log('polayer loaded from mongodb');
-        this.model = player;
+          this.model = player;
+          msg.reply(this.print());
+        }
       }
     });
   }
 
   print() {
-    return `
-      ${this.printAttr().trim()}
-      ${this.printCombatSkills().trim()}`;
+    if (this.isModelLoaded()) {
+      return `
+        ${this.printAttr().trim()}
+        ${this.printCombatSkills().trim()}`;
+    }
+
+    return '**no character loaded**';
+  }
+
+  isModelLoaded() {
+    if (this.model) return true;
+    return false;
   }
 
   printAttr() {
-    if (this.model) {
-      return `
+    return `
         **ATTRIBUTES**
-            str:${this.model.attr.str}
-            sta:${this.model.attr.sta}
-            dex:${this.model.attr.dex}
-            ref:${this.model.attr.ref}
-            per:${this.model.attr.per}
-            will:${this.model.attr.will}`;
-    }
-    return '**ATTRIBUTES**';
+        |str|${this.model.attr.str}|sta|${this.model.attr.sta}|dex|${this.model.attr.dex}|ref|${this.model.attr.ref}|per|${this.model.attr.per}|will|${this.model.attr.will}|`;
   }
+
 
   printCombatSkills() {
     let lines = '**COMBAT SKILLS**\n';
@@ -85,7 +104,7 @@ class Player {
   }
 
   setAttr(name, value) {
-    this.model.attr[name] = value;
+    if (this.isModelLoaded()) this.model.attr[name] = value;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -94,6 +113,8 @@ class Player {
         **PLAYER**
             !p print //prints player info
             !p download //downloads player info as json file
+            !p load //loads char
+            !p create //creates new char
             !p sta 11 //sets attr sta to 11
             !p sta //prints all attributes
             !p c[ombat] bow //prints bow skill
@@ -103,25 +124,25 @@ class Player {
   }
 
   save() {
-    PlayerModel.updateOne({ playerId: this.playerId, name: this.name }, this.model, () => {
-
+    PlayerModel.updateOne({ playerId: this.playerId, name: this.name }, this.model, (err) => {
+      this.checkMongooseError(err, 'failed to save char');
     });
   }
 
-  handleDownloadFile(msg) {
-    const buffer = fs.readFileSync(this.fileName);
-    /**
-     * Create the attachment using MessageAttachment,
-     * overwritting the default file name to 'memes.txt'
-     * Read more about it over at
-     * http://discord.js.org/#/docs/main/master/class/MessageAttachment
-     */
-    const attachment = new MessageAttachment(buffer, `${this.name}.json`);
-    msg.channel.send(`${msg.author}, your char file!`, attachment)
-      .then((m) => {
-        m.delete(10000);
-      });
-  }
+  // handleDownloadFile(msg) {
+  //   // const buffer = fs.readFileSync(this.fileName);
+  //   // /**
+  //   //  * Create the attachment using MessageAttachment,
+  //   //  * overwritting the default file name to 'memes.txt'
+  //   //  * Read more about it over at
+  //   //  * http://discord.js.org/#/docs/main/master/class/MessageAttachment
+  //   //  */
+  //   // const attachment = new MessageAttachment(buffer, `${this.name}.json`);
+  //   // msg.channel.send(`${msg.author}, your char file!`, attachment)
+  //   //   .then((m) => {
+  //   //     m.delete(10000);
+  //   //   });
+  // }
 
   handle(msg) {
     if ((this.handleAttr(msg)
@@ -133,7 +154,7 @@ class Player {
   }
 
   handleSubcommands(msg) {
-    const args = msg.content.match(/!p\s+(print|save)\s*/i);
+    const args = msg.content.match(/!p\s+(print|save|load|create)\s*/i);
     if (!args) return false;
     switch (args[1]) {
       case 'print':
@@ -141,6 +162,12 @@ class Player {
         break;
       case 'save':
         this.handleSave(msg);
+        break;
+      case 'load':
+        this.handleLoadChar(msg, this.name);
+        break;
+      case 'create':
+        this.handleCreateChar(msg, this.name);
         break;
       default:
         return false;
