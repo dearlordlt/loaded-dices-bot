@@ -15,10 +15,10 @@ const tpl = `
     <ul class="skills">
       <% for (var i = 0; i < character.combatSkills.length; i++) { %>
         <li class="skill">
-            <div>STR: <%= character.combatSkills[i].name %></div>
-            <div>STR: <%= character.combatSkills[i].lvl %></div>
-            <div>STR: <%= character.combatSkills[i].defense %></div>
-            <div>STR: <%= character.combatSkills[i].attack %></div>
+            <div>NAME: <%= character.combatSkills[i].name %></div>
+            <div>LVL: <%= character.combatSkills[i].lvl %></div>
+            <div>DEFENCE: <%= character.combatSkills[i].defense %></div>
+            <div>ATTACK: <%= character.combatSkills[i].attack %></div>
         </li>
       <% } %>
     </ul>
