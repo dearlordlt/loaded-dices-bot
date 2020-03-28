@@ -4,6 +4,7 @@ require('dotenv').config();
 const discord = require('discord.js');
 const parser = require('discord-command-parser');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const { sendMsg, printEnvHelp, printOtherHelp } = require('./utils');
 const { Environment } = require('./ajax-env.js');
@@ -24,6 +25,7 @@ const port = process.env.PORT || 3000;
 const client = new discord.Client();
 const prefix = '!';
 let environment = new Environment();
+
 client.on('ready', () => {
   console.log(`Connected as ${client.user.tag}`);
   client.user.setActivity('Loading dices');
@@ -134,6 +136,9 @@ const environmentCommandHandler = (msg) => {
 };
 
 client.login(process.env.API_KEY);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ type: 'application/*+json' }));
 
 app.get('/', (req, res) => res.send('Kill all humans! all bots unite!!'));
 
