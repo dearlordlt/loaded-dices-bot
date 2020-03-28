@@ -4,7 +4,10 @@ const { MessageAttachment } = require('discord.js');
 const fs = require('fs');
 const { sendMsg } = require('../utils');
 
-const PlayerModel = mongoose.model('Player', {
+const combatSkillSchema = new mongoose.Schema({
+  name: String, lvl: Number, atack: String, defense: String,
+});
+const playerSchema = new mongoose.Schema({
   playerId: Number,
   name: String,
   attr: {
@@ -15,11 +18,9 @@ const PlayerModel = mongoose.model('Player', {
     per: Number,
     will: Number,
   },
-  combatSkills: {
-    swords: Number,
-    evade: Number,
-  },
+  combatSkills: [combatSkillSchema],
 });
+const PlayerModel = mongoose.model('Player', playerSchema);
 
 class Player {
   constructor(playerId, name) {
@@ -42,7 +43,7 @@ class Player {
             per: 0,
             will: 0,
           },
-          combatSkills: {},
+          combatSkills: [],
         }, () => {
           // saved!
         });
@@ -76,8 +77,8 @@ class Player {
 
   printCombatSkills() {
     let lines = '**COMBAT SKILLS**\n';
-    if (this.model) {
-      Object.keys(this.model.combatSkills).forEach((skill) => lines = `${lines}\n ${skill}=${this.model.combatSkills[skill].lvl} attack=${this.model.combatSkills[skill].attack} defense=${this.model.combatSkills[skill].defense}`);
+    if (this.model && this.model.combatSkills) {
+      this.model.combatSkills.forEach((skill) => lines = `${lines}\n ${skill.name}=${skill.lvl} attack=${skill.atack} defense=${skill.defense}`);
     }
     return lines;
   }
@@ -163,7 +164,7 @@ class Player {
   getCombatSkillValue(name, actionType) {
     const skill = this.getCombatSkill(name);
     if (skill.lvl > 0) {
-      if (actionType in skill) return this.attr[skill[actionType]] + skill.lvl;
+      if (actionType in skill) return this.model.attr[skill[actionType]] + skill.lvl;
     }
     return 0;
   }
@@ -171,27 +172,29 @@ class Player {
   getCombatSkillDescription(name, actionType) {
     const skill = this.getCombatSkill(name);
     if (skill.lvl > 0) {
-      if (actionType in skill) return `${skill[actionType]}:${this.attr[skill[actionType]]} + ${skill.lvl}=${this.attr[skill[actionType]] + skill.lvl}`;
+      if (actionType in skill) return `${skill[actionType]}:${this.model.attr[skill[actionType]]} + ${skill.lvl}=${this.model.attr[skill[actionType]] + skill.lvl}`;
     }
     return '';
   }
 
   getOrCreateCombatSkill(name) {
-    if (!(name in this.model.combatSkills)) {
-      this.model.combatSkills[name] = {
+    let skill = this.model.combatSkills.find((el) => el.name === name);
+    if (!skill) {
+      skill = {
+        name,
         lvl: 0,
         attack: 'ref',
         defense: 'dex',
       };
+      this.model.combatSkills.push(skill);
     }
-    return this.model.combatSkills[name];
+    return skill;
   }
 
   getCombatSkill(name) {
-    if ((name in this.model.combatSkills)) {
-      return this.model.combatSkills[name];
-    }
-    return {
+    const skill = this.model.combatSkills.find((el) => el.name === name);
+    return skill || {
+      name,
       lvl: 0,
       attack: 'ref',
       defense: 'dex',
@@ -199,9 +202,7 @@ class Player {
   }
 
   removeCombatSkill(name) {
-    if (name in this.model.combatSkills) {
-      delete this.model.combatSkills[name];
-    }
+    this.model.combatSkills = this.model.combatSkills.filter((el) => el.name !== name);
   }
 
   handleCombatSkills(msg) {
