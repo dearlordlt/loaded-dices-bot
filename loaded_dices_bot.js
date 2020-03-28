@@ -26,11 +26,15 @@ const characters = require('./routes/characters');
 const app = express();
 const port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-const Cat = mongoose.model('Cat', { name: String });
+const db = mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-const kitty = new Cat({ name: 'Zildjian' });
-kitty.save().then(() => console.log('meow'));
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.info('Mongo Connected');
+});
 
 const client = new discord.Client();
 const prefix = '!';
