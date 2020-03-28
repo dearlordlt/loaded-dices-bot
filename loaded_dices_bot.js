@@ -18,7 +18,7 @@ const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 80
 
 const client = new discord.Client();
 const prefix = '!';
