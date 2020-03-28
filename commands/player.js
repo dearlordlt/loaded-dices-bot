@@ -23,10 +23,12 @@ class Player {
   constructor(playerId, name) {
     this.name = name;
     this.playerId = playerId;
-    this.model = {};
+    this.model = null;
 
     PlayerModel.findOne({ playerId, name }, (err, player) => {
       if (player == null) {
+        // eslint-disable-next-line no-console
+        console.log('player not found, creating new one');
         this.model = PlayerModel.create({
           playerId: this.playerId,
           name: this.name,
@@ -43,6 +45,8 @@ class Player {
           // saved!
         });
       } else {
+        // eslint-disable-next-line no-console
+        console.log('polayer loaded from mongodb');
         this.model = player;
       }
     });
