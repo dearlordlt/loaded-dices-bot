@@ -72,6 +72,7 @@ client.on('message', (msg) => {
     const args = msg.content.match(/!debug\s+dices\s+([0-9]*)+/i);
     if (args[1]) {
       mockRoll(Array.from(args[1]).map((d) => parseInt(d, 10)));
+      msg.reply(`**cheat next rolls will be ${args[1]}**`);
     }
     return;
   }
