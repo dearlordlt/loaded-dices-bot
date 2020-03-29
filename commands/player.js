@@ -62,9 +62,7 @@ class Player {
 
   print() {
     if (this.isModelLoaded()) {
-      return `
-        ${this.printAttr().trim()}
-        ${this.printCombatSkills().trim()}`;
+      return `https://loaded-dice-bot.herokuapp.com/characters/${this.playerId}`;
     }
 
     return '**no character loaded**';
