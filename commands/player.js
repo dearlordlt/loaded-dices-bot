@@ -126,9 +126,9 @@ class Player {
   // }
 
   handle(msg) {
-    if ((this.handleAttr(msg)
-      || this.handleCombatSkills(msg)
-      || this.handleSubcommands(msg)
+    if ((this.handleSubcommands(msg)
+         || this.handleAttr(msg)
+         || this.handleCombatSkills(msg)
     ) === false) {
       sendMsg(msg, this.help());
     }
