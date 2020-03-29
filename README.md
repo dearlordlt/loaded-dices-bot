@@ -33,7 +33,12 @@ sword 15
 ```
 
 ### context
-sets context to all rolls e.g. 
-```
-!context autofail 7
-```
+log all rolls, and allow to display it for user
+
+### env
+set autofail 7
+### debug
+set next roll to XXX
+e.g.
+!debug roll 121
+

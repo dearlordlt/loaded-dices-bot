@@ -24,27 +24,25 @@ const newChar = () => ({
 });
 
 describe('CharacterFormatter', () => {
-  describe('#getAttributesAsAscii()', () => {
-    it('should format attributes as ascii table', () => {
-      const char = getCharacterFormatter(newChar());
-      const result = char.getAttributesAsAscii();
+  it('getAttributesAsAscii() should format attributes as ascii table', () => {
+    const char = getCharacterFormatter(newChar());
+    const result = char.getAttributesAsAscii();
 
-      const expectedResult =
+    const expectedResult =
 `+-----+-----+-----+-----+-----+------+
 | str | sta | dex | ref | per | will |
 +-----+-----+-----+-----+-----+------+
 | 10  | 11  | 12  | 13  | 14  |  15  |
 +-----+-----+-----+-----+-----+------+`;
-      expect(result).toBe(expectedResult);
-    });
+    expect(result).toBe(expectedResult);
   });
 
-  describe('#getCombatSkillsAsAscii()', () => {
-    it('should format combat skills as ascii table', () => {
-      const char = getCharacterFormatter(newChar());
-      const result = char.getCombatSkillsAsAscii();
 
-      const expectedResult =
+  it('getCombatSkillsAsAscii() should format combat skills as ascii table', () => {
+    const char = getCharacterFormatter(newChar());
+    const result = char.getCombatSkillsAsAscii();
+
+    const expectedResult =
 `+---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+
 |  skill  | lvl |      defaults       |   masteries   |  skill   | lvl |       defaults        |   masteries   |
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+
@@ -52,33 +50,31 @@ describe('CharacterFormatter', () => {
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+
 |         |     |                     |               |  shield  |  3  |    a=[ref] d=[dex]    |     bash      |
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+`;
-      expect(result).toBe(expectedResult);
-    });
+    expect(result).toBe(expectedResult);
   });
 
-  describe('#getAttributesAsMarkdown()', () => {
-    it('should format attributes as md table', () => {
-      const char = getCharacterFormatter(newChar());
-      const result = char.getAttributesAsMarkdown();
 
-      const expectedResult =
+  it('getAttributesAsMarkdown() should format attributes as md table', () => {
+    const char = getCharacterFormatter(newChar());
+    const result = char.getAttributesAsMarkdown();
+
+    const expectedResult =
 `| str | sta | dex | ref | per | will |
 | --- | --- | --- | --- | --- | ---- |
 | 10  | 11  | 12  | 13  | 14  | 15   |`;
-      expect(result).toBe(expectedResult);
-    });
+    expect(result).toBe(expectedResult);
   });
-  describe('#getCombatSkillsAsMarkdown()', () => {
-    it('should format combat skills as markdown table', () => {
-      const char = getCharacterFormatter(newChar());
-      const result = char.getCombatSkillsAsMarkdown();
 
-      const expectedResult =
+
+  it('getCombatSkillsAsMarkdown() should format combat skills as markdown table', () => {
+    const char = getCharacterFormatter(newChar());
+    const result = char.getCombatSkillsAsMarkdown();
+
+    const expectedResult =
 `| skill | lvl | defaults      | masteries | skill  | lvl | defaults        | masteries |
 | ----- | --- | ------------- | --------- | ------ | --- | --------------- | --------- |
 | bow   | 2   | a=[per] d=[-] |           | evade  | 1   | a=[-] d=[dex]   |           |
 |       |     |               |           | shield | 3   | a=[ref] d=[dex] | bash      |`;
-      expect(result).toBe(expectedResult);
-    });
+    expect(result).toBe(expectedResult);
   });
 });
