@@ -7,12 +7,14 @@ const social = (args, command, sendMsg, msg) => {
   if (dices > 0) {
     let roll = [...Array(dices)].map(() => r());
 
-    roll = [...roll, ...explode(roll)];
+    if (!roll.some((el) => el === 1)) {
+      roll = [...roll, ...explode(roll)];
+    }
 
     const botchDice = roll.filter((el) => el === 1).length;
     const successDice = roll.filter((el) => el >= effectiveness).length;
 
-    const message = botchDice >= dices / 2 ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
+    const message = (botchDice >= dices / 2 && roll.some((el) => el === 1)) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
 
     const line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
     sendMsg(msg, line, command, args);
