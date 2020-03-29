@@ -9,6 +9,8 @@ const router = express.Router();
 const tpl = (char) => `
   # Attributes
 ${char.getAttributesAsMarkdown()}
+  # Combat skills
+  ${char.getCombatSkillsAsMarkdown()}
 `;
 
 
@@ -19,7 +21,6 @@ router.get('/:id', (req, res) => {
     }
     const md = new MarkdownIt();
     const text = tpl(getCharacterFormatter(character));
-    console.log(text);
     const html = md.render(text);
 
     res.status(200).send(html);
