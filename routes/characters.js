@@ -35,6 +35,7 @@ router.get('/:id', (req, res) => {
     </head>
     <body>
       <div class="container">
+        <div><h1>${character.name}</h1></div>
         ${md.render(text)}
       </div>
     </body>
