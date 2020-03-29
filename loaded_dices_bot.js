@@ -22,6 +22,7 @@ const { combat } = require('./commands/combat');
 const { playerManager } = require('./commands/player');
 const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
+const { determination, printDeterminationHelp } = require('./commands/determination');
 const { environmentCommandHandler } = require('./commands/env');
 
 const characters = require('./routes/characters');
@@ -122,6 +123,11 @@ client.on('message', (msg) => {
     return;
   }
 
+  if (parsed.command === 'de') {
+    determination(parsed.arguments, parsed.command, sendMsg, msg);
+    return;
+  }
+
   if (parsed.command === 'h') {
     msg.reply(`
           ${combat.help().trim()}
@@ -132,6 +138,7 @@ client.on('message', (msg) => {
           ${printLocationHelp().trim()}
           ${printEnvHelp().trim()}
           ${printCritHelp().trim()}
+          ${printDeterminationHelp().trim()}
           ${printOtherHelp().trim()}
         `);
   }
