@@ -52,7 +52,7 @@ class Player {
         if (player == null) {
           msg.reply(`character with name ${name} not found for current player`);
         } else {
-        // eslint-disable-next-line no-console
+          // eslint-disable-next-line no-console
           this.model = player;
           msg.reply(this.print());
         }
@@ -125,8 +125,8 @@ class Player {
 
   handle(msg) {
     if ((this.handleSubcommands(msg)
-         || this.handleAttr(msg)
-         || this.handleCombatSkills(msg)
+      || this.handleAttr(msg)
+      || this.handleCombatSkills(msg)
     ) === false) {
       sendMsg(msg, this.help());
     }
