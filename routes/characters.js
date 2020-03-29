@@ -20,8 +20,20 @@ router.get('/:id', (req, res) => {
       res.status(500).json(err);
     }
     const md = new MarkdownIt();
+    md.renderer.rules.table_open = () => '<table class="table table-striped">\n';
     const text = tpl(getCharacterFormatter(character));
-    const html = md.render(text);
+    const html = `<html>
+    <head>
+      <title>markdown-it demo</title>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="https://cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    ${md.render(text)}
+    </body>
+  </html>`;
 
     res.status(200).send(html);
   });

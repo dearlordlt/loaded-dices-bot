@@ -93,5 +93,4 @@ describe('CharacterFormatter', () => {
       console.log(result);
     });
   });
-
 });
