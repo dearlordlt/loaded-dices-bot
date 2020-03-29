@@ -15,6 +15,12 @@ class CharacterFormatter {
     return wt.string();
   }
 
+  getAttributesAsMarkdown() {
+    return `|**str**|**sta**|**dex**|**ref**|**per**|**will**|
+    |${this.char.attr.str}|${this.char.attr.sta}|${this.char.attr.dex}|${this.char.attr.ref}|${this.char.attr.per}|${this.char.attr.will}|
+    `;
+  }
+
   getCombatSkillsAsAscii() {
     const groupBy = (xs) => xs.reduce((rv, x, idx) => {
       const i = Math.floor(idx / 2);
