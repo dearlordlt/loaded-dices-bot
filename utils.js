@@ -18,9 +18,11 @@ const decorateRoll = (roll, dices = 3) => {
   });
   return roll;
 };
-const disc = () => ({
+const dicsVar = {
   client: null,
-});
+};
+const disc = () => dicsVar;
+
 const explode = (arr) => {
   let newArr = [...Array(arr.filter((el) => el === 6).length)].map(() => r());
   if (newArr.some((el) => el === 6)) {
