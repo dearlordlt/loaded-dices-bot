@@ -18,6 +18,10 @@ const decorateRoll = (roll, dices = 3) => {
   });
   return roll;
 };
+const dicsVar = {
+  client: null,
+};
+const disc = () => dicsVar;
 
 const explode = (arr) => {
   let newArr = [...Array(arr.filter((el) => el === 6).length)].map(() => r());
@@ -49,4 +53,5 @@ module.exports = {
   sendMsg,
   printEnvHelp,
   printOtherHelp,
+  disc,
 };

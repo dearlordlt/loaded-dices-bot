@@ -11,16 +11,6 @@ class Context {
   pop() {
     return this.messages.pop();
   }
-
-  getLast() {
-    return this.messages[this.messages.length - 1];
-  }
-
-  sendMsg(text) {
-    if (this.messages.length > 0) {
-      this.getLast().reply(text);
-    }
-  }
 }
 
 class ContextManager {
