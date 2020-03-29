@@ -43,13 +43,14 @@ db.once('open', () => {
 });
 
 const client = new discord.Client();
-disc.client = client;
+
 const prefix = '!';
 
 
 client.on('ready', () => {
   console.log(`Connected as ${client.user.tag}`);
   client.user.setActivity('Loading dices');
+  disc.setClient(client);
 });
 
 client.on('message', (msg) => {
@@ -59,13 +60,13 @@ client.on('message', (msg) => {
 
   if (parsed.command === 'luck') {
     // reroll the last user command
-    const oldMsg = contextManager.getUserContext(msg.author.id).pop();
+    const oldMsg = contextManager.getUserContext(msg.member.user.id).getLast();
     sendMsg(msg, 're roll last command');
     // eslint-disable-next-line no-param-reassign
     msg = oldMsg;
     parsed = parser.parse(msg, prefix);
   } else {
-    contextManager.getUserContext(msg.author.id).push(msg);
+    contextManager.getUserContext(msg.member.user.id).push(msg);
   }
 
   if (parsed.command === 'debug') {
