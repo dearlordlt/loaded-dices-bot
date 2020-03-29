@@ -2,9 +2,10 @@
 const { r, decorateRoll, sendMsg } = require('../utils');
 const { variables } = require('./variables');
 const { playerManager } = require('./player');
+const { environment } = require('../ajax-env.js');
 
 const combat = {
-  handle(msg, environment) {
+  handle(msg) {
     const args = msg.content.match(/!c\s*(\d*)*\s*((my.)?([a-z0-9]+))?\s*([+-])?\s*(\d*)?/i);
     const dices = parseInt(args[1] || '3');
     const varPrefix = args[3];

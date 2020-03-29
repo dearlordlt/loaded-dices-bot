@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 const {
   sendMsg, printEnvHelp, printOtherHelp, disc,
 } = require('./utils');
-const { Environment } = require('./ajax-env.js');
+
 const { sublocation } = require('./commands/sublocation');
 const { location, printLocationHelp } = require('./commands/location');
 const { spell, printSpellHelp } = require('./commands/spell');
@@ -44,7 +44,7 @@ db.once('open', () => {
 const client = new discord.Client();
 disc.client = client;
 const prefix = '!';
-const environment = new Environment();
+
 
 client.on('ready', () => {
   console.log(`Connected as ${client.user.tag}`);
@@ -84,7 +84,7 @@ client.on('message', (msg) => {
   }
 
   if (parsed.command === 'c') {
-    combat.handle(msg, environment);
+    combat.handle(msg);
     return;
   }
 
