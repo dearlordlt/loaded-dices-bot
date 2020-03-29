@@ -12,7 +12,6 @@ const combat = {
     const variable = args[4] || '<not exists>';
     // const sign = (args[5] === '-') ? -1 : 1; //unused
     let mod = parseInt(args[6] || '0');
-    mod *= mod;
 
     if (dices > 0) {
       let bonus = 0;

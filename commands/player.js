@@ -1,10 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line max-classes-per-file
-// const { MessageAttachment } = require('discord.js');
-
-const { sendMsg, disc } = require('../utils');
-// const { MessageAttachment } = require('discord.js');
+const { contextManager } = require('../context');
+const { sendMsg } = require('../utils');
 const { CharacterModel } = require('../models/player');
 const { getCharacterFormatter } = require('../helpers/characterFormatter');
 
@@ -22,9 +20,11 @@ class Player {
     this.model = null;
   }
 
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line class-methods-use-this
   checkMongooseError(err, msg = 'failed to communicate with DB') {
     if (err) {
-      disc.client.send(`${this.name}, ${msg}!\n ${err}`);
+      contextManager.getUserContext(this.playerId).sendMsg(`${this.name}, ${msg}!\n ${err}`);
       return false;
     }
     return true;
@@ -79,7 +79,7 @@ class Player {
     if (this.isModelLoaded()) {
       return false;
     }
-    disc.client.send('**no character loaded**');
+    contextManager.getUserContext(this.playerId).sendMsg('**no character loaded**');
     return true;
   }
 
