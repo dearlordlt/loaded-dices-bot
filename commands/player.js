@@ -52,7 +52,7 @@ class Player {
         if (player == null) {
           msg.reply(`character with name ${name} not found for current player`);
         } else {
-        // eslint-disable-next-line no-console
+          // eslint-disable-next-line no-console
           this.model = player;
           msg.reply(this.print());
         }
@@ -125,8 +125,8 @@ class Player {
 
   handle(msg) {
     if ((this.handleSubcommands(msg)
-         || this.handleAttr(msg)
-         || this.handleCombatSkills(msg)
+      || this.handleAttr(msg)
+      || this.handleCombatSkills(msg)
     ) === false) {
       sendMsg(msg, this.help());
     }
@@ -197,17 +197,20 @@ class Player {
   }
 
   getOrCreateCombatSkill(name) {
-    let skill = this.model.combatSkills.find((el) => el.name === name);
-    if (!skill) {
-      skill = {
-        name,
-        lvl: 0,
-        attack: 'ref',
-        defense: 'dex',
-      };
-      this.model.combatSkills.push(skill);
+    if (this.model.combatSkills) {
+      let skill = this.model.combatSkills.find((el) => el.name === name);
+      if (!skill) {
+        skill = {
+          name,
+          lvl: 0,
+          attack: 'ref',
+          defense: 'dex',
+        };
+        this.model.combatSkills.push(skill);
+      }
+      return skill;
     }
-    return skill;
+    return null;
   }
 
   getCombatSkill(name) {
