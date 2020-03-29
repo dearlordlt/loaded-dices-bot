@@ -2,10 +2,11 @@
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line max-classes-per-file
 // const { MessageAttachment } = require('discord.js');
-const AsciiTable = require('ascii-table');
+
 const { sendMsg, disc } = require('../utils');
 // const { MessageAttachment } = require('discord.js');
-const { PlayerModel } = require('../models/player');
+const { CharacterModel } = require('../models/player');
+const { CharacterFormater } = require('../helpers/characterFormatter');
 
 class Player {
   constructor(playerId, name) {
@@ -36,9 +37,9 @@ class Player {
       },
       combatSkills: [],
     };
-    PlayerModel.findOneAndDelete({ playerId: this.playerId, name }, (err) => {
+    CharacterModel.findOneAndDelete({ playerId: this.playerId, name }, (err) => {
       this.checkMongooseError(err);
-      PlayerModel.create(this.model, (saveErr) => {
+      CharacterModel.create(this.model, (saveErr) => {
         this.checkMongooseError(saveErr, 'failed to save char');
         msg.reply(`character created name=${this.name}`);
       });
@@ -46,7 +47,7 @@ class Player {
   }
 
   handleLoadChar(msg, name) {
-    PlayerModel.findOne({ playerId: this.playerId, name }, (err, player) => {
+    CharacterModel.findOne({ playerId: this.playerId, name }, (err, player) => {
       if (this.checkMongooseError(err)) {
         if (player == null) {
           msg.reply(`character with name ${name} not found forcurrent player`);
@@ -75,11 +76,7 @@ class Player {
   }
 
   printAttr() {
-    const table = new AsciiTable('**ATTRIBUTES**');
-    table
-      .setHeading('str', 'sta', 'dex', 'ref', 'per', 'will')
-      .addRow(this.model.attr.str, this.model.attr.sta, this.model.attr.dex, this.model.attr.ref, this.model.attr.per, this.model.attr.will);
-    return `\`\`\`asciidoc\n${table.toString()}\n\`\`\``;
+    return `\`\`\`asciidoc\n${new CharacterFormater(this.model).getAttributesAsAscii()}\n\`\`\``;
   }
 
 
@@ -112,7 +109,7 @@ class Player {
   }
 
   save() {
-    PlayerModel.updateOne({ playerId: this.playerId, name: this.name }, this.model, (err) => {
+    CharacterModel.updateOne({ playerId: this.playerId, name: this.name }, this.model, (err) => {
       this.checkMongooseError(err, 'failed to save char');
     });
   }
@@ -268,5 +265,5 @@ class PlayerManager {
 module.exports = {
   Player,
   playerManager: new PlayerManager(),
-  PlayerModel,
+
 };

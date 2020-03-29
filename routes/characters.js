@@ -25,12 +25,12 @@ const tpl = `
   <%}%>
 `;
 
-const { PlayerModel } = require('../models/player');
+const { CharacterModel } = require('../models/player');
 
 const router = express.Router();
 
 router.get('/:id', (req, res) => {
-  PlayerModel.findOne({ playerId: req.params.id }, (err, character) => {
+  CharacterModel.findOne({ playerId: req.params.id }, (err, character) => {
     if (err) {
       res.status(500).json(err);
     }

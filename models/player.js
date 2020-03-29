@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const combatSkillSchema = new mongoose.Schema({
-  name: String, lvl: Number, attack: String, defense: String,
+  name: String, lvl: Number, attack: String, defense: String, masteries: String,
 });
-const playerSchema = new mongoose.Schema({
+const characterSchema = new mongoose.Schema({
   playerId: Number,
   name: String,
   attr: {
@@ -16,8 +16,8 @@ const playerSchema = new mongoose.Schema({
   },
   combatSkills: [combatSkillSchema],
 });
-const PlayerModel = mongoose.model('Player', playerSchema);
+const CharacterModel = mongoose.model('Character', characterSchema);
 
 module.exports = {
-  PlayerModel,
+  CharacterModel,
 };

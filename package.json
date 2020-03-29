@@ -4,7 +4,7 @@
   "description": "",
   "main": "loaded_dices_bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node loaded_dices_bot.js"
   },
   "author": "",
@@ -19,11 +19,13 @@
     "eslint-config-airbnb": "^18.1.0",
     "express": "^4.17.1",
     "mongoose": "^5.9.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "word-table": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1"
+    "eslint-plugin-import": "^2.20.1",
+    "mocha": "^7.1.1"
   }
 }
