@@ -1,7 +1,9 @@
 class Environment {
-    autofail = 7;
+  constructor() {
+    this.autofail = 7;
+  }
 }
 
 module.exports = {
-    Environment
-}
+  Environment,
+};
