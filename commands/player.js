@@ -8,6 +8,13 @@ const { sendMsg, disc } = require('../utils');
 const { CharacterModel } = require('../models/player');
 const { getCharacterFormatter } = require('../helpers/characterFormatter');
 
+const nullSkill = () => ({
+  name: '',
+  lvl: 0,
+  attack: 'ref',
+  defense: 'dex',
+});
+
 class Player {
   constructor(playerId, name) {
     this.name = name;
@@ -68,6 +75,14 @@ class Player {
     return '**no character loaded**';
   }
 
+  modelNotLoadedError() {
+    if (this.isModelLoaded()) {
+      return false;
+    }
+    disc.client.send('**no character loaded**');
+    return true;
+  }
+
   isModelLoaded() {
     if (this.model) return true;
     return false;
@@ -90,8 +105,7 @@ class Player {
   help() {
     return `
         **PLAYER**
-            !p print //prints player info
-            !p download //downloads player info as json file
+            !p print [attr] [combat]//prints player info
             !p load //loads char
             !p create //creates new char
             !p sta 11 //sets attr sta to 11
@@ -108,20 +122,6 @@ class Player {
     });
   }
 
-  // handleDownloadFile(msg) {
-  //   // const buffer = fs.readFileSync(this.fileName);
-  //   // /**
-  //   //  * Create the attachment using MessageAttachment,
-  //   //  * overwritting the default file name to 'memes.txt'
-  //   //  * Read more about it over at
-  //   //  * http://discord.js.org/#/docs/main/master/class/MessageAttachment
-  //   //  */
-  //   // const attachment = new MessageAttachment(buffer, `${this.name}.json`);
-  //   // msg.channel.send(`${msg.author}, your char file!`, attachment)
-  //   //   .then((m) => {
-  //   //     m.delete(10000);
-  //   //   });
-  // }
 
   handle(msg) {
     if ((this.handleSubcommands(msg)
@@ -139,6 +139,7 @@ class Player {
 
     switch (args[1]) {
       case 'print':
+        if (this.modelNotLoadedError()) break;
         switch (secondCommand) {
           case 'attr':
             sendMsg(msg, this.printAttr());
@@ -151,9 +152,7 @@ class Player {
             break;
         }
         break;
-      case 'save':
-        this.handleSave(msg);
-        break;
+
       case 'load':
         this.handleLoadChar(msg, this.name);
         break;
@@ -170,6 +169,7 @@ class Player {
   handleAttr(msg) {
     const args = msg.content.match(/!p\s*(str|sta|dex|ref|per|will)\s*(\d*)/i);
     if (!args) return false;
+    if (this.modelNotLoadedError()) return true;
     if (args[1] && args[2]) {
       this.setAttr(args[1], parseInt(args[2], 10));
       this.save();
@@ -210,14 +210,14 @@ class Player {
     return skill;
   }
 
+
   getCombatSkill(name) {
-    const skill = this.model.combatSkills.find((el) => el.name === name);
-    return skill || {
-      name,
-      lvl: 0,
-      attack: 'ref',
-      defense: 'dex',
-    };
+    if (this.model) {
+      const skill = this.model.combatSkills.find((el) => el.name === name);
+      return skill || nullSkill();
+    }
+
+    return nullSkill();
   }
 
   removeCombatSkill(name) {
@@ -227,6 +227,8 @@ class Player {
   handleCombatSkills(msg) {
     const args = msg.content.match(/!p\s+(combat|c)(\s+(add|remove)*\s*(\S+)\s*((\d+)\s*(a=(\S+))*\s*(d=(\S+))*)*)*/i);
     if (!args) return false;
+    if (this.modelNotLoadedError()) return true;
+
     const name = args[4];
     const lvl = args[6];
     const a = args[8];
@@ -271,5 +273,5 @@ class PlayerManager {
 module.exports = {
   Player,
   playerManager: new PlayerManager(),
-
+  nullSkill,
 };
