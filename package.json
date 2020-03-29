@@ -4,7 +4,7 @@
   "description": "",
   "main": "loaded_dices_bot.js",
   "scripts": {
-    "test": "mocha",
+    "test": "jasmine",
     "start": "node loaded_dices_bot.js",
     "lint": "eslint \"**/*.js\""
   },
@@ -29,6 +29,7 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
-    "mocha": "^7.1.1"
+    "jasmine": "^3.5.0",
+    "jasmine-spec-reporter": "^5.0.1"
   }
 }

@@ -1,10 +1,6 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-
-const assert = require('assert');
-
-
 const { getCharacterFormatter } = require('../helpers/characterFormatter');
 
 const newChar = () => ({
@@ -39,9 +35,7 @@ describe('CharacterFormatter', () => {
 +-----+-----+-----+-----+-----+------+
 | 10  | 11  | 12  | 13  | 14  |  15  |
 +-----+-----+-----+-----+-----+------+`;
-      assert.strictEqual(expectedResult, result);
-
-      console.log(result);
+      expect(result).toBe(expectedResult);
     });
   });
 
@@ -58,9 +52,7 @@ describe('CharacterFormatter', () => {
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+
 |         |     |                     |               |  shield  |  3  |    a=[ref] d=[dex]    |     bash      |
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+`;
-      assert.strictEqual(expectedResult, result);
-
-      console.log(result);
+      expect(result).toBe(expectedResult);
     });
   });
 
@@ -73,9 +65,7 @@ describe('CharacterFormatter', () => {
 `| str | sta | dex | ref | per | will |
 | --- | --- | --- | --- | --- | ---- |
 | 10  | 11  | 12  | 13  | 14  | 15   |`;
-      assert.strictEqual(expectedResult, result);
-
-      console.log(result);
+      expect(result).toBe(expectedResult);
     });
   });
   describe('#getCombatSkillsAsMarkdown()', () => {
@@ -88,9 +78,7 @@ describe('CharacterFormatter', () => {
 | ----- | --- | ------------- | --------- | ------ | --- | --------------- | --------- |
 | bow   | 2   | a=[per] d=[-] |           | evade  | 1   | a=[-] d=[dex]   |           |
 |       |     |               |           | shield | 3   | a=[ref] d=[dex] | bash      |`;
-      assert.strictEqual(expectedResult, result);
-
-      console.log(result);
+      expect(result).toBe(expectedResult);
     });
   });
 });
