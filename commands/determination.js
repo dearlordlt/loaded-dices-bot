@@ -13,7 +13,7 @@ const determination = (args, command, sendMsg, msg) => {
 
     const successDice = roll.filter((el) => el >= 4).length;
 
-    const line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${(successDice >= diff) ? '**failed**' : '**succeeded**'}`;
+    const line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${(successDice >= diff) ? '**succeeded**' : '**failed**'}`;
     sendMsg(msg, line, command, args);
   } else {
     sendMsg(msg, `${printDeterminationHelp()}`, command, args);
