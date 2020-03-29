@@ -4,7 +4,7 @@
   "description": "",
   "main": "loaded_dices_bot.js",
   "scripts": {
-    "test": "mocha",
+    "test": "jasmine-node spec/ --color --growl",
     "start": "node loaded_dices_bot.js",
     "lint": "eslint \"**/*.js\""
   },
@@ -18,6 +18,8 @@
     "ejs": "^3.0.1",
     "eslint-config-airbnb": "^18.1.0",
     "express": "^4.17.1",
+    "jasmine": "^3.5.0",
+    "jasmine-node": "^3.0.0",
     "markdown-it": "^10.0.0",
     "markdown-table": "^2.0.0",
     "mongoose": "^5.9.6",
@@ -27,7 +29,6 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1",
-    "mocha": "^7.1.1"
+    "eslint-plugin-import": "^2.20.1"
   }
 }

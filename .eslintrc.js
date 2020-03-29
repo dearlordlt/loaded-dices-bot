@@ -18,5 +18,6 @@ module.exports = {
     'linebreak-style': 0,
     'no-return-assign': 0,
     'no-plusplus': 0,
+    'max-classes-per-file': 0
   },
 };
