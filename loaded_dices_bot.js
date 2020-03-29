@@ -66,9 +66,14 @@ client.on('message', (msg) => {
     contextManager.getUserContext(msg.author.id).push(msg);
   }
 
+  if (parsed.command === 'debug') {
+    console.log(msg);
+    return;
+  }
+
+
   if (parsed.command === 'p') {
-    console.log(msg.member);
-    playerManager.getPlayer(msg.member.id, msg.member.displayName).handle(msg);
+    playerManager.getPlayer(msg.member.user.id, msg.member.displayName).handle(msg);
     return;
   }
 

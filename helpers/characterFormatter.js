@@ -34,6 +34,5 @@ class CharacterFormatter {
 }
 const getCharacterFormatter = (character) => new CharacterFormatter(character);
 module.exports = {
-  CharacterFormatter,
   getCharacterFormatter,
 };

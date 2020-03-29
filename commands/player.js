@@ -6,7 +6,7 @@
 const { sendMsg, disc } = require('../utils');
 // const { MessageAttachment } = require('discord.js');
 const { CharacterModel } = require('../models/player');
-const { CharacterFormater } = require('../helpers/characterFormatter');
+const { getCharacterFormatter } = require('../helpers/characterFormatter');
 
 class Player {
   constructor(playerId, name) {
@@ -50,7 +50,7 @@ class Player {
     CharacterModel.findOne({ playerId: this.playerId, name }, (err, player) => {
       if (this.checkMongooseError(err)) {
         if (player == null) {
-          msg.reply(`character with name ${name} not found forcurrent player`);
+          msg.reply(`character with name ${name} not found for current player`);
         } else {
         // eslint-disable-next-line no-console
           this.model = player;
@@ -76,12 +76,12 @@ class Player {
   }
 
   printAttr() {
-    return `**ATTRIBUTES**\n\`\`\`asciidoc\n${new CharacterFormater(this.model).getAttributesAsAscii()}\n\`\`\``;
+    return `**ATTRIBUTES**\n\`\`\`asciidoc\n${getCharacterFormatter(this.model).getAttributesAsAscii()}\n\`\`\``;
   }
 
 
   printCombatSkills() {
-    return `**COMBAT SKILLS**\n\`\`\`asciidoc\n${new CharacterFormater(this.model).getCombatSkillsAsAscii()}\n\`\`\``;
+    return `**COMBAT SKILLS**\n\`\`\`asciidoc\n${getCharacterFormatter(this.model).getCombatSkillsAsAscii()}\n\`\`\``;
   }
 
   setAttr(name, value) {
