@@ -76,16 +76,12 @@ class Player {
   }
 
   printAttr() {
-    return `\`\`\`asciidoc\n${new CharacterFormater(this.model).getAttributesAsAscii()}\n\`\`\``;
+    return `**ATTRIBUTES**\n\`\`\`asciidoc\n${new CharacterFormater(this.model).getAttributesAsAscii()}\n\`\`\``;
   }
 
 
   printCombatSkills() {
-    let lines = '**COMBAT SKILLS**\n';
-    if (this.model && this.model.combatSkills) {
-      this.model.combatSkills.forEach((skill) => lines = `${lines}\n ${skill.name}=${skill.lvl} attack=${skill.attack} defense=${skill.defense}`);
-    }
-    return lines;
+    return `**COMBAT SKILLS**\n\`\`\`asciidoc\n${new CharacterFormater(this.model).getCombatSkillsAsAscii()}\n\`\`\``;
   }
 
   setAttr(name, value) {
@@ -139,11 +135,23 @@ class Player {
   }
 
   handleSubcommands(msg) {
-    const args = msg.content.match(/!p\s+(print|save|load|create)\s*/i);
+    const args = msg.content.match(/!p\s+(print|save|load|create)\s*(\S+)*/i);
     if (!args) return false;
+    const secondCommand = args[2] || 'none';
+
     switch (args[1]) {
       case 'print':
-        sendMsg(msg, this.print());
+        switch (secondCommand) {
+          case 'attr':
+            sendMsg(msg, this.printAttr());
+            break;
+          case 'combat':
+            sendMsg(msg, this.printCombatSkills());
+            break;
+          default:
+            sendMsg(msg, this.print());
+            break;
+        }
         break;
       case 'save':
         this.handleSave(msg);
