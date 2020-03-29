@@ -20,7 +20,7 @@ class CharacterFormatter {
     return table([
       ['str', 'sta', 'dex', 'ref', 'per', 'will'],
       [this.char.attr.str, this.char.attr.sta, this.char.attr.dex,
-        this.char.attr.ref, this.char.attr.per, this.char.attr.will]
+        this.char.attr.ref, this.char.attr.per, this.char.attr.will],
     ]);
   }
 
@@ -39,6 +39,21 @@ class CharacterFormatter {
       rows);
 
     return wt.string();
+  }
+
+  getCombatSkillsAsMarkdown() {
+    const groupBy = (xs) => xs.reduce((rv, x, idx) => {
+      const i = Math.floor(idx / 2);
+      const el = (rv[i] || ['', '', '', '']);
+      el.push(x);
+      rv[i] = el.flat();
+      if (rv[i].length > 8) rv[i] = rv[i].slice(4, 11);
+
+      return rv;
+    }, []);
+    const rows = groupBy(this.char.combatSkills.map((skill) => [skill.name, skill.lvl, `a=[${skill.attack}] d=[${skill.defense}]`, skill.masteries]));
+    rows.unshift(['skill', 'lvl', 'defaults', 'masteries', 'skill', 'lvl', 'defaults', 'masteries']);
+    return table(rows);
   }
 }
 const getCharacterFormatter = (character) => new CharacterFormatter(character);

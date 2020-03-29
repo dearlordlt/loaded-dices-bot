@@ -78,4 +78,20 @@ describe('CharacterFormatter', () => {
       console.log(result);
     });
   });
+  describe('#getCombatSkillsAsMarkdown()', () => {
+    it('should format combat skills as markdown table', () => {
+      const char = getCharacterFormatter(newChar());
+      const result = char.getCombatSkillsAsMarkdown();
+
+      const expectedResult =
+`| skill | lvl | defaults      | masteries | skill  | lvl | defaults        | masteries |
+| ----- | --- | ------------- | --------- | ------ | --- | --------------- | --------- |
+| bow   | 2   | a=[per] d=[-] |           | evade  | 1   | a=[-] d=[dex]   |           |
+|       |     |               |           | shield | 3   | a=[ref] d=[dex] | bash      |`;
+      assert.strictEqual(expectedResult, result);
+
+      console.log(result);
+    });
+  });
+
 });
