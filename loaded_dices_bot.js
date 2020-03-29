@@ -158,27 +158,32 @@ client.on('message', (msg) => {
 
 client.login(process.env.API_KEY);
 
+const keepAliveFn = () => {
+  const options = {
+    host: 'https://loaded-dice-bot.herokuapp.com',
+    port: 80,
+    path: '/',
+  };
+  http.get(options, (res) => {
+    res.on('data', (chunk) => {
+      try {
+        console.log(`HEROKU RESPONSE: ${chunk}`);
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
+  }).on('error', (err) => {
+    console.log(`Error: ${err.message}`);
+  });
+};
+
 const keepAlive = () => {
   setInterval(() => {
-    const options = {
-      host: 'https://loaded-dice-bot.herokuapp.com',
-      port: 80,
-      path: '/',
-    };
-    http.get(options, (res) => {
-      res.on('data', (chunk) => {
-        try {
-          console.log(`HEROKU RESPONSE: ${chunk}`);
-        } catch (err) {
-          console.log(err.message);
-        }
-      });
-    }).on('error', (err) => {
-      console.log(`Error: ${err.message}`);
-    });
+    keepAliveFn();
   }, 20 * 60 * 1000); // load every 20 minutes
 };
 
+keepAliveFn();
 keepAlive();
 
 app.use(morgan('combined'));
