@@ -197,20 +197,17 @@ class Player {
   }
 
   getOrCreateCombatSkill(name) {
-    if (this.model.combatSkills) {
-      let skill = this.model.combatSkills.find((el) => el.name === name);
-      if (!skill) {
-        skill = {
-          name,
-          lvl: 0,
-          attack: 'ref',
-          defense: 'dex',
-        };
-        this.model.combatSkills.push(skill);
-      }
-      return skill;
+    let skill = this.model.combatSkills.find((el) => el.name === name);
+    if (!skill) {
+      skill = {
+        name,
+        lvl: 0,
+        attack: 'ref',
+        defense: 'dex',
+      };
+      this.model.combatSkills.push(skill);
     }
-    return null;
+    return skill;
   }
 
   getCombatSkill(name) {
