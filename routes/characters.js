@@ -7,9 +7,9 @@ const { getCharacterFormatter } = require('../helpers/characterFormatter');
 const router = express.Router();
 
 const tpl = (char) => `
-  # Attributes
+  ## Attributes
 ${char.getAttributesAsMarkdown()}
-  # Combat skills
+  ## Combat skills
   ${char.getCombatSkillsAsMarkdown()}
 `;
 
@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
     const text = tpl(getCharacterFormatter(character));
     const html = `<html>
     <head>
-      <title>markdown-it demo</title>
+      <title>Kill all humans! all bots unite!!</title>
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
