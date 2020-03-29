@@ -5,7 +5,8 @@
   "main": "loaded_dices_bot.js",
   "scripts": {
     "test": "mocha",
-    "start": "node loaded_dices_bot.js"
+    "start": "node loaded_dices_bot.js",
+    "lint": "eslint \"**/*.js\""
   },
   "author": "",
   "license": "ISC",
