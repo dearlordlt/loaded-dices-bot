@@ -16,7 +16,8 @@ class CharacterFormatter {
   }
 
   getAttributesAsMarkdown() {
-    return `|**str**|**sta**|**dex**|**ref**|**per**|**will**|
+    return `|str|sta|dex|ref|per|will|
+    |---|---|---|---|---|---|
     |${this.char.attr.str}|${this.char.attr.sta}|${this.char.attr.dex}|${this.char.attr.ref}|${this.char.attr.per}|${this.char.attr.will}|
     `;
   }
