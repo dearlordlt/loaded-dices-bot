@@ -160,7 +160,7 @@ client.login(process.env.API_KEY);
 
 const keepAliveFn = () => {
   const options = {
-    host: 'https://loaded-dice-bot.herokuapp.com',
+    host: `http://localhost:${port}`,
     port: 80,
     path: '/',
   };
