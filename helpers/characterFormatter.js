@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 const WordTable = require('word-table');
+const table = require('markdown-table');
 
 class CharacterFormatter {
   constructor(character) {
@@ -16,10 +17,11 @@ class CharacterFormatter {
   }
 
   getAttributesAsMarkdown() {
-    return `|str|sta|dex|ref|per|will|
-    |---|---|---|---|---|---|
-    |${this.char.attr.str}|${this.char.attr.sta}|${this.char.attr.dex}|${this.char.attr.ref}|${this.char.attr.per}|${this.char.attr.will}|
-    `;
+    return table([
+      ['str', 'sta', 'dex', 'ref', 'per', 'will'],
+      [this.char.attr.str, this.char.attr.sta, this.char.attr.dex,
+        this.char.attr.ref, this.char.attr.per, this.char.attr.will]
+    ]);
   }
 
   getCombatSkillsAsAscii() {

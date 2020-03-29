@@ -12,11 +12,11 @@ const newChar = () => ({
   name: 'Test Char',
   attr: {
     str: 10,
-    sta: 10,
-    dex: 10,
-    ref: 10,
-    per: 10,
-    will: 10,
+    sta: 11,
+    dex: 12,
+    ref: 13,
+    per: 14,
+    will: 15,
   },
   combatSkills: [{
     name: 'bow', lvl: 2, masteries: '', attack: 'per', defense: '-',
@@ -37,7 +37,7 @@ describe('CharacterFormatter', () => {
 `+-----+-----+-----+-----+-----+------+
 | str | sta | dex | ref | per | will |
 +-----+-----+-----+-----+-----+------+
-| 10  | 10  | 10  | 10  | 10  |  10  |
+| 10  | 11  | 12  | 13  | 14  |  15  |
 +-----+-----+-----+-----+-----+------+`;
       assert.strictEqual(expectedResult, result);
 
@@ -58,6 +58,21 @@ describe('CharacterFormatter', () => {
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+
 |         |     |                     |               |  shield  |  3  |    a=[ref] d=[dex]    |     bash      |
 +---------+-----+---------------------+---------------+----------+-----+-----------------------+---------------+`;
+      assert.strictEqual(expectedResult, result);
+
+      console.log(result);
+    });
+  });
+
+  describe('#getAttributesAsMarkdown()', () => {
+    it('should format attributes as md table', () => {
+      const char = getCharacterFormatter(newChar());
+      const result = char.getAttributesAsMarkdown();
+
+      const expectedResult =
+`| str | sta | dex | ref | per | will |
+| --- | --- | --- | --- | --- | ---- |
+| 10  | 11  | 12  | 13  | 14  | 15   |`;
       assert.strictEqual(expectedResult, result);
 
       console.log(result);

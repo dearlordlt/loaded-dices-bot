@@ -8,17 +8,7 @@ const router = express.Router();
 
 const tpl = (char) => `
   # Attributes
-  ${char.getAttributesAsMarkdown()}
-
-| a | a | a | a | a |
-|---|---|---|---|---|
-| s | s | s | s | s |
-| s | s | s | s | s |
-
-
-|str|sta|dex|ref|per|will|
-|---|---|---|---|---|---|
-|10|10|10|10|10|10|
+${char.getAttributesAsMarkdown()}
 `;
 
 
