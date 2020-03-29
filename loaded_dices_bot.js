@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const http = require('http');
 
 const {
-  sendMsg, printEnvHelp, printOtherHelp,
+  sendMsg, printEnvHelp, printOtherHelp, mockRoll,
 } = require('./utils');
 
 const { sublocation } = require('./commands/sublocation');
@@ -69,7 +69,10 @@ client.on('message', (msg) => {
   }
 
   if (parsed.command === 'debug') {
-    console.log(msg);
+    const args = msg.content.match(/!debug\s+dices\s+([0-9]*)+/i);
+    if (args[1]) {
+      mockRoll(Array.from(args[1]).map((d) => parseInt(d, 10)));
+    }
     return;
   }
 

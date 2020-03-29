@@ -1,5 +1,10 @@
 /* eslint-disable no-console */
-const r = () => Math.ceil(Math.random() * 6);
+let mockDices = [];
+
+const r = () => ((mockDices.length > 0) ? mockDices.pop() : Math.ceil(Math.random() * 6));
+const mockRoll = (dices) => {
+  mockDices = [...dices];
+};
 
 const decorateRoll = (roll, dices = 3) => {
   // eslint-disable-next-line no-param-reassign
@@ -49,4 +54,5 @@ module.exports = {
   sendMsg,
   printEnvHelp,
   printOtherHelp,
+  mockRoll,
 };
