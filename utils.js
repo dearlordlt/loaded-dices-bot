@@ -6,7 +6,7 @@ const mockRoll = (dices) => {
   mockDices = [...dices];
 };
 
-const decorateRoll = (roll, dices = 3) => {
+const decorateRoll = (roll, dices = 3, diff = 4) => {
   // eslint-disable-next-line no-param-reassign
   roll = roll.map((el, index) => {
     if (index >= dices) {
@@ -16,6 +16,9 @@ const decorateRoll = (roll, dices = 3) => {
       return `__${el}__`;
     }
     if (el === 1) {
+      return `~~**${el}**~~`;
+    }
+    if (diff && el < diff) {
       return `~~${el}~~`;
     }
 

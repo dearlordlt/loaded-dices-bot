@@ -16,7 +16,7 @@ const social = (args, command, sendMsg, msg) => {
 
     const message = (botchDice >= dices / 2 && roll.some((el) => el === 1)) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
 
-    const line = `roll ${dices}d: [${decorateRoll(roll, dices)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
+    const line = `roll ${dices}d: [${decorateRoll(roll, dices, effectiveness)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
     sendMsg(msg, line, command, args);
   } else {
     sendMsg(msg, 'how many?', command, args);
