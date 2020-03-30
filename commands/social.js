@@ -41,6 +41,10 @@ const social = (args, command, sendMsg, msg, rerollDice = 0) => {
 
     const line = `roll ${dices}d: [${decorateRoll(roll, dices, effectiveness)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
     sendMsg(msg, line, command, args);
+    if (rerollDice) {
+      // eslint-disable-next-line no-useless-return
+      return;
+    }
   } else if (args[0] === 'luck' && parseInt(args[1], 10) > 0) {
     social(args, command, sendMsg, msg, args[0]);
   } else if (args[0] === 'log') {
