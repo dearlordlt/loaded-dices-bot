@@ -1,5 +1,7 @@
 const { r, explode, decorateRoll } = require('../utils');
 
+const rolls = [];
+
 const social = (args, command, sendMsg, msg) => {
   const dices = parseInt(args[0], 10);
   const effectiveness = parseInt(args[1], 10) || 4;
@@ -10,6 +12,11 @@ const social = (args, command, sendMsg, msg) => {
     if (!roll.some((el) => el === 1)) {
       roll = [...roll, ...explode(roll)];
     }
+
+    rolls.push({ id: msg.author.id, roll });
+
+    // eslint-disable-next-line no-console
+    console.dir(rolls);
 
     const botchDice = roll.filter((el) => el === 1).length;
     const successDice = roll.filter((el) => el >= effectiveness).length;
