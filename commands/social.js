@@ -54,13 +54,14 @@ const social = (args, command, sendMsg, msg, rerollDice = 0) => {
       return;
     }
   } else if (args[0] === 'luck' && parseInt(args[1], 10) > 0 && !rerollDice) {
-    social(
+    /* social(
       [parseInt(args[1], 10), rolls[rolls.length.effectiveness]],
       command,
       sendMsg,
       msg,
       args[1],
-    );
+    ); */
+    sendMsg(msg, 'not implemented yet', command, args);
   } else if (args[0] === 'log') {
     sendMsg(msg, `your recent rolls: ${JSON.stringify(rolls)}`, command, args);
   } else {
