@@ -2,34 +2,16 @@ const { r, explode, decorateRoll } = require('../utils');
 
 const rolls = [];
 
-const social = (args, command, sendMsg, msg, rerollDice = 0) => {
-  let dices = parseInt(args[0], 10);
+const social = (args, command, sendMsg, msg) => {
+  const dices = parseInt(args[0], 10);
   const effectiveness = parseInt(args[1], 10) || 4;
 
   if (dices > 0) {
+    /* SOCIAL ROLL */
     let roll = [];
     let botch = false;
-    if (!rerollDice) {
-      roll = [...Array(dices)].map(() => r());
-    } else {
-      const rollsByUser = rolls.filter((el) => el.id === msg.author.id);
-      if (!rollsByUser.length) {
-        sendMsg(msg, 'no recent rolls to reroll', command, args);
-        return;
-      }
-      roll = rollsByUser.pop().roll; // get last roll from user rolls
-      dices = roll.length;
-      const newDice = [];
-      for (let i = 0; i < rerollDice; i++) {
-        newDice.push(r());
-        const min = Math.min(...roll);
-        const index = roll.indexOf(min);
-        if (index > -1) {
-          roll.splice(index, 1);
-        }
-      }
-      roll = [...roll, newDice];
-    }
+
+    roll = [...Array(dices)].map(() => r());
 
     if (!roll.some((el) => el === 1)) {
       roll = [...roll, ...explode(roll)];
@@ -44,23 +26,14 @@ const social = (args, command, sendMsg, msg, rerollDice = 0) => {
     rolls.push({ id: msg.author.id, roll, effectiveness });
 
     const successDice = roll.filter((el) => el >= effectiveness).length;
-
-    const message = (botch) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''} ${rerollDice ? 'This is luck roll' : ''}`;
+    const message = (botch) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}}`;
 
     const line = `roll ${dices}d: [${decorateRoll(roll, dices, effectiveness)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
+
     sendMsg(msg, line, command, args);
-    if (rerollDice) {
-      // eslint-disable-next-line no-useless-return
-      return;
-    }
-  } else if (args[0] === 'luck' && parseInt(args[1], 10) > 0 && !rerollDice) {
-    /* social(
-      [parseInt(args[1], 10), rolls[rolls.length.effectiveness]],
-      command,
-      sendMsg,
-      msg,
-      args[1],
-    ); */
+    /* END SOCIAL ROLL */
+  } else if (args[0] === 'luck' && parseInt(args[1], 10) > 0) {
+    /* @TODO: implement luck */
     sendMsg(msg, 'not implemented yet', command, args);
   } else if (args[0] === 'log') {
     sendMsg(msg, `your recent rolls: ${JSON.stringify(rolls)}`, command, args);
