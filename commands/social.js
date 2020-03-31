@@ -44,8 +44,9 @@ const social = (args, command, sendMsg, msg) => {
         rollLog += `${decorateRoll(el.roll, el.dices, el.effectiveness)} - ${el.dices}d - ${el.effectiveness} effectiveness;
         `;
       }
-    })
-    sendMsg(msg, `your recent rolls: ${rollLog}`, command, args);
+    });
+    sendMsg(msg, `your recent rolls: 
+        ${rollLog}`, command, args);
   } else {
     sendMsg(msg, 'how many?', command, args);
   }
