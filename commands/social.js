@@ -23,7 +23,9 @@ const social = (args, command, sendMsg, msg) => {
       }
     }
 
-    rolls.push({ id: msg.author.id, roll, effectiveness });
+    rolls.push({
+      id: msg.author.id, roll, effectiveness, dices,
+    });
 
     const successDice = roll.filter((el) => el >= effectiveness).length;
     const message = (botch) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
@@ -36,7 +38,14 @@ const social = (args, command, sendMsg, msg) => {
     /* @TODO: implement luck */
     sendMsg(msg, 'not implemented yet', command, args);
   } else if (args[0] === 'log') {
-    sendMsg(msg, `your recent rolls: ${JSON.stringify(rolls)}`, command, args);
+    let rollLog = '';
+    rolls.forEach((el) => {
+      if (el.id === msg.author.id) {
+        rollLog += `${decorateRoll(el.roll, el.dices, el.effectiveness)}
+        `;
+      }
+    })
+    sendMsg(msg, `your recent rolls: ${rollLog}`, command, args);
   } else {
     sendMsg(msg, 'how many?', command, args);
   }
