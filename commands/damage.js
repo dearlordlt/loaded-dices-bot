@@ -1,5 +1,25 @@
 const { r } = require('../utils');
 
+const damageMap = [
+  { damage: 'T', base: 1, shock: 3 },
+  { damage: 'B', base: 2, shock: 0 },
+  { damage: 'C', base: 3, shock: 1 },
+];
+
+const resolveSHockAndBaseDmg = (effect) => {
+  const dmg = damageMap.find((el) => el.damage.toLowerCase() === effect.toLowerCase());
+  return dmg;
+};
+
+const printDamageMsg = (baseDamage, shock) => `Blow does **${baseDamage}** dmg and **${shock}** shock`;
+
+const decorateDamageRoll = (roll, ln) => roll.map((el) => {
+  if (el > ln) {
+    return `**${el}**`;
+  }
+  return `~~${el}~~`;
+});
+
 const damage = (args, command, sendMsg, msg) => {
   const dices = parseInt(args[0], 10);
 
@@ -13,14 +33,24 @@ const damage = (args, command, sendMsg, msg) => {
 
   if (dices > 0) {
     const arr6 = [...Array(6)].map(() => damageArr.pop() || '').reverse();
-    let reply = '';
-    let effects = '';
+    const reply = [];
+    const effects = [];
+    let shock = 0;
+    let baseDamage = 0;
     for (let i = 0; i < dices; i++) {
       const roll = r();
-      effects += arr6[roll - 1] ? arr6[roll - 1] : '';
-      reply += `${roll},`;
+      const effect = arr6[roll - 1];
+      const resolve = resolveSHockAndBaseDmg(effect) || false;
+      if (resolve.damage && effect) {
+        shock += resolve.shock || 0;
+        baseDamage += resolve.base || 0;
+      }
+      if (effect) {
+        effects.push(effect);
+      }
+      reply.push(roll);
     }
-    const line = `roll ${dices}d and damage ${args[1]}: Result (${effects}), Roll (${reply})`;
+    const line = `roll ${dices}d and damage ${args[1]}: Result (${effects}), Roll (${decorateDamageRoll(reply, (6 - args[1].split('').length))}), ${printDamageMsg(baseDamage, shock)}`;
     sendMsg(msg, line, command, args);
   } else {
     sendMsg(msg, 'how many?', command, args);
