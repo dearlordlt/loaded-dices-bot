@@ -14,7 +14,7 @@ const resolveSHockAndBaseDmg = (effect) => {
 const printDamageMsg = (baseDamage, shock) => `Blow does **${baseDamage}** dmg and **${shock}** shock`;
 
 const decorateDamageRoll = (roll, ln) => roll.map((el) => {
-  if (el > ln) {
+  if (el > (6 - ln)) {
     return `**${el}**`;
   }
   return `~~${el}~~`;
@@ -50,7 +50,7 @@ const damage = (args, command, sendMsg, msg) => {
       }
       reply.push(roll);
     }
-    const line = `roll ${dices}d and damage ${args[1]}: Result (${effects}), Roll (${decorateDamageRoll(reply, (6 - args[1].split('').length))}), ${printDamageMsg(baseDamage, shock)}`;
+    const line = `roll ${dices}d and damage ${args[1]}: Result (${effects}), Roll (${decorateDamageRoll(reply, args[1].split('').length)}), ${printDamageMsg(baseDamage, shock)}`;
     sendMsg(msg, line, command, args);
   } else {
     sendMsg(msg, 'how many?', command, args);
