@@ -41,7 +41,7 @@ const social = (args, command, sendMsg, msg) => {
     let rollLog = '';
     rolls.forEach((el) => {
       if (el.id === msg.author.id) {
-        rollLog += `${decorateRoll(el.roll, el.dices, el.effectiveness)}
+        rollLog += `${decorateRoll(el.roll, el.dices, el.effectiveness)} - ${el.dices}d - ${el.effectiveness} effectiveness;
         `;
       }
     })
