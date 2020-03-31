@@ -13,14 +13,12 @@ const social = (args, command, sendMsg, msg) => {
 
     roll = [...Array(dices)].map(() => r());
 
-    if (!roll.some((el) => el === 1)) {
-      roll = [...roll, ...explode(roll)];
+    const botchNum = roll.filter((el) => el === 1).length;
+    const successNum = roll.filter((el) => el >= effectiveness).length;
+    if (botchNum >= successNum) {
+      botch = true;
     } else {
-      const botchNum = roll.filter((el) => el === 1).length;
-      const successNum = roll.filter((el) => el >= effectiveness).length;
-      if (botchNum >= successNum) {
-        botch = true;
-      }
+      roll = [...roll, ...explode(roll)];
     }
 
     rolls.push({
