@@ -26,7 +26,7 @@ const social = (args, command, sendMsg, msg) => {
     rolls.push({ id: msg.author.id, roll, effectiveness });
 
     const successDice = roll.filter((el) => el >= effectiveness).length;
-    const message = (botch) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}}`;
+    const message = (botch) ? '**botch**' : `success ${successDice >= dices ? '***skill increase!***' : ''}`;
 
     const line = `roll ${dices}d: [${decorateRoll(roll, dices, effectiveness)}] = ${successDice}; ${message} with effectiveness of ${effectiveness}`;
 
