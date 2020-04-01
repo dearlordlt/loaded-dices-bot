@@ -7,7 +7,7 @@ const calculations = (args, command, sendMsg, msg) => {
 
   if (subCommand && subCommand.toUpperCase() === 'STA' && parseInt(args[1], 10)) {
     const sta = parseInt(args[1], 10);
-    const line = `1/3 STA = ${Math.ceil((sta * 2) / 3)}, 2/3 STA = ${Math.ceil(((sta * 2) / 3) * 2)} MAX Intoxication = ${Math.ceil(sta / 3)}`;
+    const line = `1/3 STA = ${Math.ceil((sta * 2) / 3)}, 2/3 STA = ${Math.ceil(((sta * 2) / 3) * 2)}, MAX Intoxication = ${Math.ceil(sta / 3)}`;
     sendMsg(msg, line, command, args);
     return;
   }
