@@ -7,7 +7,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const http = require('http');
 
 const {
   sendMsg, printEnvHelp, printOtherHelp, mockRoll,
@@ -25,6 +24,7 @@ const { contextManager } = require('./context');
 const { crit, printCritHelp } = require('./commands/crit');
 const { determination, printDeterminationHelp } = require('./commands/determination');
 const { environmentCommandHandler } = require('./commands/env');
+const { calculations, printCalculationsHelp } = require('./commands/calculations');
 
 const characters = require('./routes/characters');
 
@@ -133,6 +133,11 @@ client.on('message', (msg) => {
     return;
   }
 
+  if (parsed.command === 'calc') {
+    calculations(parsed.arguments, parsed.command, sendMsg, msg);
+    return;
+  }
+
   if (parsed.command === 'h') {
     msg.reply(`
           ${combat.help().trim()}
@@ -144,6 +149,7 @@ client.on('message', (msg) => {
           ${printEnvHelp().trim()}
           ${printCritHelp().trim()}
           ${printDeterminationHelp().trim()}
+          ${printCalculationsHelp().trim()}
           ${printOtherHelp().trim()}
         `);
   }
