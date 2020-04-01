@@ -8,7 +8,7 @@ class Rules {
       3: 'Head - Face: **+1B**',
       4: 'Head - Face: **+1B**',
       5: 'Head - Neck: **+2B**',
-      6: 'Head - Eye: **+2C** and usually unarmored',
+      6: 'Head - Eye: **+2C** this is usually unarmored',
     },
     Body: {
       1: 'Body - Flesh: **+1T**',
