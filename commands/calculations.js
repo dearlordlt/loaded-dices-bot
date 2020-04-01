@@ -5,10 +5,11 @@ const printCalculationsHelp = () => `
 const calculations = (args, command, sendMsg, msg) => {
   const subCommand = args[0];
 
-  if (subCommand.toUpperCase() === 'STA' && parseInt(args[1], 10)) {
+  if (subCommand && subCommand.toUpperCase() === 'STA' && parseInt(args[1], 10)) {
     const sta = parseInt(args[1], 10);
-    const line = `1/3 STA = ${Math.ceil(sta / 3)}, 2/3 STA = ${Math.ceil((sta / 3) * 2)}`;
+    const line = `1/3 STA = ${Math.ceil((sta * 2) / 3)}, 2/3 STA = ${Math.ceil(((sta * 2) / 3) * 2)}`;
     sendMsg(msg, line, command, args);
+    return;
   }
 
   sendMsg(msg, printCalculationsHelp(), command, args);
