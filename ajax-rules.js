@@ -23,7 +23,7 @@ class Rules {
       2: 'Flesh: **+1T**',
       3: 'Flesh: **+1T**',
       4: 'Flesh: **+1T**',
-      5: 'Joint or Tendon: **+2T and 50% to drop weapon**',
+      5: 'Flesh: **+1T**',
       6: 'Joint or Tendon: **+2T and 50% to drop weapon**',
     },
     RArm: {
@@ -31,7 +31,7 @@ class Rules {
       2: 'Flesh: **+1T**',
       3: 'Flesh: **+1T**',
       4: 'Flesh: **+1T**',
-      5: 'Joint or Tendon: **+2T and 50% to drop weapon**',
+      5: 'Flesh: **+1T**',
       6: 'Joint or Tendon: **+2T and 50% to drop weapon**',
     },
     LLeg: {
