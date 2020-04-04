@@ -3,7 +3,7 @@ const { Rules } = require('../ajax-rules');
 
 const location = (args, command, sendMsg, msg) => {
   const roll = r();
-  const line = `${roll} hits ${Rules.getLocation(6)}`;
+  const line = `${roll} hits ${Rules.getLocation(roll)}`;
   sendMsg(msg, line, command, args);
 };
 
